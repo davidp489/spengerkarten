@@ -1,25 +1,14 @@
-import java.util.Map.Entry;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class SelectedQuiz_D extends Application
@@ -52,7 +41,7 @@ public class SelectedQuiz_D extends Application
 		newQuiz.addVocab("Zweite", "ZZweite");
 		newQuiz.addVocab("Dritte", "DDritte");
 		newQuiz.addVocab("Vierte", "VVierte");
-		newQuiz.addVocab("Fünfte", "FFünfte");
+		newQuiz.addVocab("Fï¿½nfte", "FFï¿½nfte");
 		newQuiz.addVocab("Sechste", "SSechste");
 		newQuiz.addVocab("Siebte", "SSiebte");
 		
@@ -77,19 +66,23 @@ public class SelectedQuiz_D extends Application
 		
 		
 		
-		this.back = new Button("Zurück");
+		this.back = new Button("ZurÃ¼ck");
 		this.continueButton = new Button("Weiter");
 		
+		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
 		continueButton.setOnAction((ActionEvent event) -> {
-			newQuiz.getKeyFromIndex(index++); 
+			index++;
+			System.out.println(index);
+			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
 		});
 		
 		back.setOnAction((ActionEvent event) -> {
-			newQuiz.getKeyFromIndex(index--); 
+			index--;
+			System.out.println(index);
+			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
 		});
 		
 		
-		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
 		
 		
 		leftvbox.setPadding(new Insets(100, 0, 200, 50));
