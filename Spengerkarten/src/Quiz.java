@@ -6,18 +6,18 @@ public class Quiz {
 	//Hier ist die HashMap und so drinnen (Technik hinter dem Ganzen)
 	
 	// Name vom Quiz
-	private String quizName;
+	private String name;
 	
 	// values (zb vokabeln)
 	private LinkedHashMap<String, String> values;
 	
 	public Quiz(String quizName) {
 		values = new LinkedHashMap<>();
-		this.quizName = quizName;
+		this.name = quizName;
 	}
 	
 	public String getName() {
-		return quizName;
+		return name;
 	}
 	
 	// vokabel hinzufügen
