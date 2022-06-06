@@ -35,18 +35,22 @@ public class SelectedQuiz_D extends Application
 	@Override
 	public void start(Stage stage) throws Exception
 	{
+		//Test Quiz Objekt
 		Quiz newQuiz = new Quiz("quizname");
 		
 		newQuiz.addVocab("Erste", "EErste");
 		newQuiz.addVocab("Zweite", "ZZweite");
 		newQuiz.addVocab("Dritte", "DDritte");
 		newQuiz.addVocab("Vierte", "VVierte");
-		newQuiz.addVocab("Fï¿½nfte", "FFï¿½nfte");
+		newQuiz.addVocab("Fuenfte", "FFuenfte");
 		newQuiz.addVocab("Sechste", "SSechste");
 		newQuiz.addVocab("Siebte", "SSiebte");
 		
+		//Die Buttons für die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
+		//Ein Element des Quizes wird hier abgebildet
 		HBox quizElement = new HBox();
+		//Hier befinden sich die Buttons 'Weiter' und 'Zurueck'
 		HBox bottomhbox = new HBox();
 		
 		pane = new BorderPane();
@@ -66,16 +70,20 @@ public class SelectedQuiz_D extends Application
 		
 		
 		
-		this.back = new Button("ZurÃ¼ck");
+		this.back = new Button("Zurueck");
 		this.continueButton = new Button("Weiter");
 		
+		//Inhalt des Elementes
 		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
+		
+		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt
 		continueButton.setOnAction((ActionEvent event) -> {
 			index++;
 			System.out.println(index);
 			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
 		});
 		
+		//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
 		back.setOnAction((ActionEvent event) -> {
 			index--;
 			System.out.println(index);
