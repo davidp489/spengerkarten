@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -21,7 +25,13 @@ public class SelectedQuiz_D extends Application
 	Button multipleChoice;
 	Button back;
 	Button continueButton;
+	Button reveal;
 	
+	Quiz newQuiz;
+	
+	private List keys;
+	
+	private boolean checkIfRand = false;
 	
 	private static int index = 0;
 	
@@ -35,8 +45,9 @@ public class SelectedQuiz_D extends Application
 	@Override
 	public void start(Stage stage) throws Exception
 	{
+		
 		//Test Quiz Objekt
-		Quiz newQuiz = new Quiz("quizname");
+		newQuiz = new Quiz("quizname");
 		
 		newQuiz.addVocab("Erste", "EErste");
 		newQuiz.addVocab("Zweite", "ZZweite");
@@ -52,6 +63,8 @@ public class SelectedQuiz_D extends Application
 		HBox quizElement = new HBox();
 		//Hier befinden sich die Buttons 'Weiter' und 'Zurueck'
 		HBox bottomhbox = new HBox();
+		//Zeigt den live-stand der bisherigen Antworten
+		VBox livestats = new VBox();
 		
 		pane = new BorderPane();
 		MenuBar menuBar = new MenuBar();
@@ -66,45 +79,113 @@ public class SelectedQuiz_D extends Application
 		this.random.setPrefSize(100, 30);
 		this.multipleChoice.setPrefSize(100, 30);
 		
-		leftvbox.setSpacing(15);
-		
+		this.reveal = new Button("Auflösen");
 		
 		
 		this.back = new Button("Zurueck");
+		Label quizname = new Label(newQuiz.getName());
 		this.continueButton = new Button("Weiter");
+		
+		
+		Label livestatlable = new Label("Live stats:");
+		Label correctAnswers = new Label("Richtige antworten: ");
+		Label wrongAnswers = new Label("Falsche antworten: ");
+		Label percentage = new Label("Richtig in %: ");
+		Label grade = new Label("Note: ");
+		
+		
 		
 		//Inhalt des Elementes
 		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
+		quizKey.setPrefSize(200, 20);
 		
-		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt
-		continueButton.setOnAction((ActionEvent event) -> {
-			index++;
-			System.out.println(index);
-			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
+		random.setOnAction((ActionEvent event) -> {
+			this.checkIfRand = true;
+			//Index wird automatisch auf 0 gesetzt
+			index = 0;
+			//Inhalt der Hashmap wird in einer Liste gespeichert
+			keys = new ArrayList<String>(newQuiz.getMap().keySet());
+			//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
+			Collections.shuffle(keys);
+			//Der erste Index wird abgebildet
+			quizKey.setText(keys.get(0).toString());
 		});
 		
+		
+		
+			
+		
+			
+		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt	
+		continueButton.setOnAction((ActionEvent event) -> {
+			if(index == newQuiz.getSize() - 1)
+			{
+				return;
+			}
+			//Sobald der Random Button gedrückt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
+			if(checkIfRand)
+			{
+				index++;
+				System.out.println(index);
+				System.out.println(keys);
+				//Die Liste mit dem Randomizer
+				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+			} else
+			{
+				index++;
+				System.out.println(index);
+				//Die Liste ohne Randomizer
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+			}
+				
+		});
+			
 		//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
 		back.setOnAction((ActionEvent event) -> {
-			index--;
-			System.out.println(index);
-			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
+			if(index == 0)
+			{
+				return;
+			}
+			if(checkIfRand)
+			{
+				index--;
+				System.out.println(index);
+				System.out.println(keys);
+				//Die Liste mit dem Randomizer
+				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+			} else
+			{
+				index--;
+				System.out.println(index);
+				//Die Liste ohne Randomizer
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+			}
+			
+				
 		});
 		
 		
 		
 		
+		leftvbox.setSpacing(15);
+		bottomhbox.setSpacing(20);
+		
 		leftvbox.setPadding(new Insets(100, 0, 200, 50));
+		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
+		quizElement.setPadding(new Insets(100, 500, 0, 100));
 		
 		pane.setTop(menuBar);
 		pane.setLeft(leftvbox);
 		pane.setCenter(quizElement);
 		pane.setBottom(bottomhbox);
+		pane.setRight(livestats);
 		
 		
 		
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
-		bottomhbox.getChildren().addAll(back, continueButton);
+		bottomhbox.getChildren().addAll(back, quizname,  continueButton);
 		quizElement.getChildren().addAll(quizKey);
+		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentage, grade, reveal);
 		
 		scene = new Scene(pane, 1000, 720);
 		
