@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Quiz {
@@ -26,6 +27,17 @@ public class Quiz {
 	
 	public String getValue(String key) {
 		return values.get(key);
+	}
+	
+	// optional, muss man nicht benutzen, geht aber auch
+	public HashMap<String, String> getMap(){
+		return values;
+	}
+	
+	// damit kann man mit einem index durch alle keys durchgehen
+	// in kombination mit getValue(key) hast du dann alles was du brauchst
+	public String getKeyFromIndex(int index) {
+		return new ArrayList<String>(values.keySet()).get(index);
 	}
 	
 	public int getSize() {
