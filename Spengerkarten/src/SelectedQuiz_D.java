@@ -26,6 +26,7 @@ public class SelectedQuiz_D extends Application
 	Button back;
 	Button continueButton;
 	Button reveal;
+	Button hide;
 	
 	Quiz newQuiz;
 	
@@ -80,6 +81,7 @@ public class SelectedQuiz_D extends Application
 		this.multipleChoice.setPrefSize(100, 30);
 		
 		this.reveal = new Button("Auflösen");
+		this.hide = new Button("Verstecken");
 		
 		
 		this.back = new Button("Zurueck");
@@ -96,7 +98,7 @@ public class SelectedQuiz_D extends Application
 		
 		
 		//Inhalt des Elementes
-		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
+		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
 		quizKey.setPrefSize(200, 20);
 		
 		random.setOnAction((ActionEvent event) -> {
@@ -108,11 +110,42 @@ public class SelectedQuiz_D extends Application
 			//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
 			Collections.shuffle(keys);
 			//Der erste Index wird abgebildet
-			quizKey.setText(keys.get(0).toString());
+			quizKey.setText("Key: " + keys.get(0).toString());
 		});
 		
+		/*Wenn der Button 'Aufloesen' gedrückt wird, wird die Antwort der Frage/des Vokabulars angezeigt und 
+		 * der Button wird mit dem Button 'Verstecken' ersetzt
+		 */
+		reveal.setOnAction((ActionEvent event) -> {
+			livestats.getChildren().remove(reveal);
+			livestats.getChildren().add(hide);
+			if(checkIfRand)
+			{
+				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
+				quizKey.setText("Value: " + newQuiz.getValue(keys.get(index).toString()));
+			} else
+			{
+				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
+				quizKey.setText("Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+			}
+		});
 		
-		
+		/*Der Button 'Verstecken' wird ersetzt mit dem Button 'Aufloesen', die Frage bzw. die nicht übersetzte Vokabel wird angezeigt
+		 * 
+		 */
+		hide.setOnAction((ActionEvent event) -> {
+			livestats.getChildren().remove(hide);
+			livestats.getChildren().add(reveal);
+			if(checkIfRand)
+			{
+				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
+				quizKey.setText("Key: " + keys.get(index).toString());
+			} else
+			{
+				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+			}
+		});
 			
 		
 			
@@ -129,13 +162,13 @@ public class SelectedQuiz_D extends Application
 				System.out.println(index);
 				System.out.println(keys);
 				//Die Liste mit dem Randomizer
-				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+				quizKey.setText("Key: " + keys.get(index).toString());
 			} else
 			{
 				index++;
 				System.out.println(index);
 				//Die Liste ohne Randomizer
-				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
 			}
 				
 		});
@@ -152,13 +185,13 @@ public class SelectedQuiz_D extends Application
 				System.out.println(index);
 				System.out.println(keys);
 				//Die Liste mit dem Randomizer
-				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+				quizKey.setText("Key: " + keys.get(index).toString());
 			} else
 			{
 				index--;
 				System.out.println(index);
 				//Die Liste ohne Randomizer
-				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
 			}
 			
 				
