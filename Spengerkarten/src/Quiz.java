@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Quiz {
 	
@@ -9,10 +9,10 @@ public class Quiz {
 	private String quizName;
 	
 	// values (zb vokabeln)
-	private HashMap<String, String> values;
+	private LinkedHashMap<String, String> values;
 	
 	public Quiz(String quizName) {
-		values = new HashMap<>();
+		values = new LinkedHashMap<>();
 		this.quizName = quizName;
 	}
 	
@@ -30,12 +30,12 @@ public class Quiz {
 	}
 	
 	// optional, muss man nicht benutzen, geht aber auch
-	public HashMap<String, String> getMap(){
+	public LinkedHashMap<String, String> getMap(){
 		return values;
 	}
 	
 	// damit kann man mit einem index durch alle keys durchgehen
-	// in kombination mit getValue(key) hast du dann alles was du brauchst
+	// in kombination mit getValue(key) hat man sowohl key als auch value
 	public String getKeyFromIndex(int index) {
 		return new ArrayList<String>(values.keySet()).get(index);
 	}
