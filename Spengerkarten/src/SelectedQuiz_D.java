@@ -25,6 +25,9 @@ public class SelectedQuiz_D extends Application
 	Button multipleChoice;
 	Button back;
 	Button continueButton;
+	Button reveal;
+	
+	Quiz newQuiz;
 	
 	private List keys;
 	
@@ -44,7 +47,7 @@ public class SelectedQuiz_D extends Application
 	{
 		
 		//Test Quiz Objekt
-		Quiz newQuiz = new Quiz("quizname");
+		newQuiz = new Quiz("quizname");
 		
 		newQuiz.addVocab("Erste", "EErste");
 		newQuiz.addVocab("Zweite", "ZZweite");
@@ -61,7 +64,7 @@ public class SelectedQuiz_D extends Application
 		//Hier befinden sich die Buttons 'Weiter' und 'Zurueck'
 		HBox bottomhbox = new HBox();
 		//Zeigt den live-stand der bisherigen Antworten
-		//VBox livestats = new VBox();
+		VBox livestats = new VBox();
 		
 		pane = new BorderPane();
 		MenuBar menuBar = new MenuBar();
@@ -76,77 +79,90 @@ public class SelectedQuiz_D extends Application
 		this.random.setPrefSize(100, 30);
 		this.multipleChoice.setPrefSize(100, 30);
 		
+		this.reveal = new Button("Auflösen");
+		
 		
 		this.back = new Button("Zurueck");
 		Label quizname = new Label(newQuiz.getName());
 		this.continueButton = new Button("Weiter");
 		
-		/*
+		
 		Label livestatlable = new Label("Live stats:");
 		Label correctAnswers = new Label("Richtige antworten: ");
 		Label wrongAnswers = new Label("Falsche antworten: ");
 		Label percentage = new Label("Richtig in %: ");
 		Label grade = new Label("Note: ");
-		*/
+		
+		
 		
 		//Inhalt des Elementes
 		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
+		quizKey.setPrefSize(200, 20);
 		
 		random.setOnAction((ActionEvent event) -> {
 			this.checkIfRand = true;
+			//Index wird automatisch auf 0 gesetzt
 			index = 0;
-			keys = new ArrayList(newQuiz.getMap().keySet());
+			//Inhalt der Hashmap wird in einer Liste gespeichert
+			keys = new ArrayList<String>(newQuiz.getMap().keySet());
+			//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
 			Collections.shuffle(keys);
+			//Der erste Index wird abgebildet
 			quizKey.setText(keys.get(0).toString());
 		});
 		
-		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt
+		
 		
 			
 		
 			
-			
-			continueButton.setOnAction((ActionEvent event) -> {
-				if(index == newQuiz.getSize() - 1)
-				{
-					return;
-				}
-				if(checkIfRand)
-				{
-					index++;
-					System.out.println(index);
-					System.out.println(keys);
-					quizKey.setText(keys.get(index).toString());
-				} else
-				{
-					index++;
-					System.out.println(index);
-					quizKey.setText(newQuiz.getKeyFromIndex(index)); 
-				}
+		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt	
+		continueButton.setOnAction((ActionEvent event) -> {
+			if(index == newQuiz.getSize() - 1)
+			{
+				return;
+			}
+			//Sobald der Random Button gedrückt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
+			if(checkIfRand)
+			{
+				index++;
+				System.out.println(index);
+				System.out.println(keys);
+				//Die Liste mit dem Randomizer
+				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+			} else
+			{
+				index++;
+				System.out.println(index);
+				//Die Liste ohne Randomizer
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+			}
 				
-			});
+		});
 			
-			//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
-			back.setOnAction((ActionEvent event) -> {
-				if(index == 0)
-				{
-					return;
-				}
-				if(checkIfRand)
-				{
-					index--;
-					System.out.println(index);
-					System.out.println(keys);
-					quizKey.setText(keys.get(index).toString());
-				} else
-				{
-					index--;
-					System.out.println(index);
-					quizKey.setText(newQuiz.getKeyFromIndex(index)); 
-				}
+		//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
+		back.setOnAction((ActionEvent event) -> {
+			if(index == 0)
+			{
+				return;
+			}
+			if(checkIfRand)
+			{
+				index--;
+				System.out.println(index);
+				System.out.println(keys);
+				//Die Liste mit dem Randomizer
+				quizKey.setText("Key: " + keys.get(index).toString() + "Value: " + newQuiz.getValue(keys.get(index).toString()));
+			} else
+			{
+				index--;
+				System.out.println(index);
+				//Die Liste ohne Randomizer
+				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index) + "Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+			}
 			
 				
-			});
+		});
 		
 		
 		
@@ -162,14 +178,14 @@ public class SelectedQuiz_D extends Application
 		pane.setLeft(leftvbox);
 		pane.setCenter(quizElement);
 		pane.setBottom(bottomhbox);
-		//pane.setRight(livestats);
+		pane.setRight(livestats);
 		
 		
 		
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
 		bottomhbox.getChildren().addAll(back, quizname,  continueButton);
 		quizElement.getChildren().addAll(quizKey);
-		//livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentage, grade);
+		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentage, grade, reveal);
 		
 		scene = new Scene(pane, 1000, 720);
 		
