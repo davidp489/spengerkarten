@@ -1,23 +1,23 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Quiz {
 	
 	//Hier ist die HashMap und so drinnen (Technik hinter dem Ganzen)
 	
 	// Name vom Quiz
-	private String quizName;
+	private String name;
 	
 	// values (zb vokabeln)
-	private HashMap<String, String> values;
+	private LinkedHashMap<String, String> values;
 	
 	public Quiz(String quizName) {
-		values = new HashMap<>();
-		this.quizName = quizName;
+		values = new LinkedHashMap<>();
+		this.name = quizName;
 	}
 	
 	public String getName() {
-		return quizName;
+		return name;
 	}
 	
 	// vokabel hinzufügen
@@ -30,12 +30,12 @@ public class Quiz {
 	}
 	
 	// optional, muss man nicht benutzen, geht aber auch
-	public HashMap<String, String> getMap(){
+	public LinkedHashMap<String, String> getMap(){
 		return values;
 	}
 	
 	// damit kann man mit einem index durch alle keys durchgehen
-	// in kombination mit getValue(key) hast du dann alles was du brauchst
+	// in kombination mit getValue(key) hat man sowohl key als auch value
 	public String getKeyFromIndex(int index) {
 		return new ArrayList<String>(values.keySet()).get(index);
 	}
