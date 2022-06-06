@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -22,6 +26,9 @@ public class SelectedQuiz_D extends Application
 	Button back;
 	Button continueButton;
 	
+	private List keys;
+	
+	private boolean checkIfRand = false;
 	
 	private static int index = 0;
 	
@@ -35,6 +42,7 @@ public class SelectedQuiz_D extends Application
 	@Override
 	public void start(Stage stage) throws Exception
 	{
+		
 		//Test Quiz Objekt
 		Quiz newQuiz = new Quiz("quizname");
 		
@@ -52,6 +60,8 @@ public class SelectedQuiz_D extends Application
 		HBox quizElement = new HBox();
 		//Hier befinden sich die Buttons 'Weiter' und 'Zurueck'
 		HBox bottomhbox = new HBox();
+		//Zeigt den live-stand der bisherigen Antworten
+		//VBox livestats = new VBox();
 		
 		pane = new BorderPane();
 		MenuBar menuBar = new MenuBar();
@@ -66,45 +76,100 @@ public class SelectedQuiz_D extends Application
 		this.random.setPrefSize(100, 30);
 		this.multipleChoice.setPrefSize(100, 30);
 		
-		leftvbox.setSpacing(15);
-		
-		
 		
 		this.back = new Button("Zurueck");
+		Label quizname = new Label(newQuiz.getName());
 		this.continueButton = new Button("Weiter");
+		
+		/*
+		Label livestatlable = new Label("Live stats:");
+		Label correctAnswers = new Label("Richtige antworten: ");
+		Label wrongAnswers = new Label("Falsche antworten: ");
+		Label percentage = new Label("Richtig in %: ");
+		Label grade = new Label("Note: ");
+		*/
 		
 		//Inhalt des Elementes
 		Label quizKey = new Label(newQuiz.getKeyFromIndex(index));
 		
+		random.setOnAction((ActionEvent event) -> {
+			this.checkIfRand = true;
+			index = 0;
+			keys = new ArrayList(newQuiz.getMap().keySet());
+			Collections.shuffle(keys);
+			quizKey.setText(keys.get(0).toString());
+		});
+		
 		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt
-		continueButton.setOnAction((ActionEvent event) -> {
-			index++;
-			System.out.println(index);
-			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
-		});
 		
-		//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
-		back.setOnAction((ActionEvent event) -> {
-			index--;
-			System.out.println(index);
-			quizKey.setText(newQuiz.getKeyFromIndex(index)); 
-		});
+			
+		
+			
+			
+			continueButton.setOnAction((ActionEvent event) -> {
+				if(index == newQuiz.getSize() - 1)
+				{
+					return;
+				}
+				if(checkIfRand)
+				{
+					index++;
+					System.out.println(index);
+					System.out.println(keys);
+					quizKey.setText(keys.get(index).toString());
+				} else
+				{
+					index++;
+					System.out.println(index);
+					quizKey.setText(newQuiz.getKeyFromIndex(index)); 
+				}
+				
+			});
+			
+			//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
+			back.setOnAction((ActionEvent event) -> {
+				if(index == 0)
+				{
+					return;
+				}
+				if(checkIfRand)
+				{
+					index--;
+					System.out.println(index);
+					System.out.println(keys);
+					quizKey.setText(keys.get(index).toString());
+				} else
+				{
+					index--;
+					System.out.println(index);
+					quizKey.setText(newQuiz.getKeyFromIndex(index)); 
+				}
+			
+				
+			});
 		
 		
 		
+		
+		leftvbox.setSpacing(15);
+		bottomhbox.setSpacing(20);
 		
 		leftvbox.setPadding(new Insets(100, 0, 200, 50));
+		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
+		quizElement.setPadding(new Insets(100, 500, 0, 100));
 		
 		pane.setTop(menuBar);
 		pane.setLeft(leftvbox);
 		pane.setCenter(quizElement);
 		pane.setBottom(bottomhbox);
+		//pane.setRight(livestats);
 		
 		
 		
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
-		bottomhbox.getChildren().addAll(back, continueButton);
+		bottomhbox.getChildren().addAll(back, quizname,  continueButton);
 		quizElement.getChildren().addAll(quizKey);
+		//livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentage, grade);
 		
 		scene = new Scene(pane, 1000, 720);
 		
