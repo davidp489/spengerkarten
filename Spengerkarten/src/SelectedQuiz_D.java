@@ -15,22 +15,30 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Diese Klasse beinhaltet die Logik hinter dem Randomizer und der normalen Abbildung der einzelnen Elementen eines Quizes
+ * 
+ * @author pav22044@spengergasse.at
+ * @version 2022-06-07
+ *
+ */
+
 public class SelectedQuiz_D extends Application
 {
-	BorderPane pane;
+	private BorderPane pane;
 	Scene scene;
 	
-	Button random;
-	Button writeValue;
-	Button multipleChoice;
-	Button back;
-	Button continueButton;
-	Button reveal;
-	Button hide;
+	private Button random;
+	private Button writeValue;
+	private Button multipleChoice;
+	private Button back;
+	private Button continueButton;
+	private Button reveal;
+	private Button hide;
 	
 	Quiz newQuiz;
 	
-	private List keys;
+	private List<String> keys;
 	
 	private boolean checkIfRand = false;
 	
@@ -68,6 +76,7 @@ public class SelectedQuiz_D extends Application
 		VBox livestats = new VBox();
 		
 		pane = new BorderPane();
+		
 		MenuBar menuBar = new MenuBar();
 		Menu home = new Menu("Home");
 		menuBar.getMenus().add(home);
@@ -109,6 +118,10 @@ public class SelectedQuiz_D extends Application
 			keys = new ArrayList<String>(newQuiz.getMap().keySet());
 			//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
 			Collections.shuffle(keys);
+			System.out.format("Index: %s", index);
+			System.out.println();
+			System.out.format("Liste mit Randomizer: %s", keys);
+			System.out.println();
 			//Der erste Index wird abgebildet
 			quizKey.setText("Key: " + keys.get(0).toString());
 		});
@@ -159,14 +172,20 @@ public class SelectedQuiz_D extends Application
 			if(checkIfRand)
 			{
 				index++;
-				System.out.println(index);
-				System.out.println(keys);
+				System.out.format("Index: %s", index);
+				System.out.println();
+				System.out.format("Liste mit Randomizer: %s", keys);
+				System.out.println();
 				//Die Liste mit dem Randomizer
 				quizKey.setText("Key: " + keys.get(index).toString());
+			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
 				index++;
-				System.out.println(index);
+				System.out.format("Index: %s", index);
+				System.out.println();
+				System.out.format("Liste: %s", newQuiz.getMap());
+				System.out.println();
 				//Die Liste ohne Randomizer
 				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
 			}
@@ -179,17 +198,24 @@ public class SelectedQuiz_D extends Application
 			{
 				return;
 			}
+			//Sobald der Random Button gedrückt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
 			if(checkIfRand)
 			{
 				index--;
-				System.out.println(index);
-				System.out.println(keys);
+				System.out.format("Index: %s", index);
+				System.out.println();
+				System.out.format("Liste mit Randomizer: %s", keys);
+				System.out.println();
 				//Die Liste mit dem Randomizer
 				quizKey.setText("Key: " + keys.get(index).toString());
+			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
 				index--;
-				System.out.println(index);
+				System.out.format("Index: %s", index);
+				System.out.println();
+				System.out.format("Liste: %s", newQuiz.getMap());
+				System.out.println();
 				//Die Liste ohne Randomizer
 				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
 			}
