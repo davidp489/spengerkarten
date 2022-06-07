@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,33 +8,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 
 public class New_Quiz_C extends Application{
 	
+	Main_Page_L backHome = new Main_Page_L();
 	String vocSetName;
 	private int vocCounter = 0;
+	HashMap<String, String> cacheLHM = new HashMap<String, String>();
 
 	public static void main(String[] args)
 	{
@@ -42,7 +34,6 @@ public class New_Quiz_C extends Application{
 
 	@Override
 	public void start(Stage stage) throws Exception {
-
 		BorderPane pane = new BorderPane(); //Ist der komplette Bildschirm
 		VBox vBoxLeft = new VBox(); //VBox links
 		VBox vBoxCenter = new VBox(); //VBox center
@@ -61,7 +52,9 @@ public class New_Quiz_C extends Application{
 		value.setPromptText("second vocab");
 		Button addButton = new Button("Add");
 		Button saveButton = new Button("Save");
-		Label vocNumber = new Label("Anzahl an Vokabeln: " + vocCounter);
+		Label vocNumberLb = new Label("Anzahl an Vokabeln: " + vocCounter);
+		Main_Page_L backHome = new Main_Page_L();
+		
 		
 		
 		//Hintergrund Sachen
@@ -90,39 +83,92 @@ public class New_Quiz_C extends Application{
 				}
 				else
 				{
-					listView.getItems().add(key.getText()+ " / " + value.getText());
-					vocCounter++;
-					System.out.println(vocCounter);
+					boolean duplicateKey = false; //wird auf true gesetzt wenn es den Wert von key bereits im Karteikartenset gibt
+					boolean duplicateValue = false; //wird auf true gesetzt wenn es en Wert von value bereits im Karteikartenset gibt
+					Alert duplicateAlert = new Alert(AlertType.ERROR);
+					duplicateAlert.setTitle("Error");
+					duplicateAlert.setHeaderText("Duplicate entry!");
+					
+					for(String x : cacheLHM.keySet()) //setzt duplicateEntry bei bedarf auf true
+					{
+						if(key.getText().equals(x) || value.getText().equals(x))
+						{
+							if(key.getText().equals(x))
+							{
+								duplicateAlert.setContentText("Das erste Wort befindet sich bereits in den Karteikarten");
+								duplicateKey = true;
+							}
+							else if(value.getText().equals(x))
+							{
+								duplicateAlert.setContentText("Das zweite Wort befindet sich bereits in den Karteikarten");
+								duplicateValue = true;
+							}
+							
+						}
+					}
+					
+					for(String y : cacheLHM.values()) //setzt duplicateEntry bei bedarf auf true
+					{
+						if(value.getText().equals(y) || key.getText().equals(y))
+						{
+							if(key.getText().equals(y))
+							{
+								duplicateAlert.setContentText("Das erste Wort befindet sich bereits in den Karteikarten");
+								duplicateKey = true;
+							}
+							else if(value.getText().equals(y))
+							{
+								duplicateAlert.setContentText("Das zweite Wort befindet sich bereits in den Karteikarten");
+								duplicateValue = true;
+							}
+						}
+					}
+					
+					if(duplicateKey == true && duplicateValue == true)
+					{
+						duplicateAlert.setContentText("Diese Karteikarte existiert bereits");
+						duplicateAlert.show();
+					}
+					else if(duplicateKey == true || duplicateValue == true)
+					{
+						//Hier muss nicht der Content geändert werden weil das schon oben gemacht wurde
+						duplicateAlert.show();
+					}
+					else
+					{
+						listView.getItems().add(key.getText()+ " / " + value.getText());
+						cacheLHM.put(key.getText(), value.getText());
+						vocCounter++;
+						vocNumberLb.setText("Anzahl an Vokabeln: " + Integer.toString(vocCounter));
+						key.setText("");
+						value.setText("");
+						System.out.println(cacheLHM);
+					}
 				}
-					key.setText("");
-					value.setText("");
 			}
 		});
 		
+		
+		//Bennen der Karten
 		VBox saveV = new VBox();
 		Text saveTxt = new Text("Name your Spengerkarten:");
 		TextField saveTF = new TextField();
 		Button saveB = new Button("Save");
 		Scene save = new Scene(saveV, 200, 150);
 		Stage saveStage = new Stage();
+		saveStage.initModality(Modality.APPLICATION_MODAL);
+		saveV.setAlignment(Pos.CENTER);
+		saveStage.setResizable(false);
+		saveStage.setScene(save);
+		saveV.getChildren().addAll(saveTxt, saveTF, saveB);
+		VBox.setMargin(saveTF, new Insets(10));
+		saveV.setStyle("-fx-font-size: 14");
+		saveTF.setStyle("-fx-font-size: 14");
+		saveB.setStyle("-fx-font-size: 14");
 		
-		//Handled das vom save Button inklusive dem bennen Screen
-		saveButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				
-				saveV.setAlignment(Pos.CENTER);
-				saveStage.setResizable(false);
-				saveStage.setScene(save);
-				saveStage.initModality(Modality.APPLICATION_MODAL);
-				saveV.getChildren().addAll(saveTxt, saveTF, saveB);
-				VBox.setMargin(saveTF, new Insets(10));
-				saveV.setStyle("-fx-font-size: 14");
-				saveTF.setStyle("-fx-font-size: 14");
-				saveB.setStyle("-fx-font-size: 14");
-				saveStage.show();
-			}
+		saveButton.setOnAction((ActionEvent saveShow) ->
+		{
+			saveStage.show();
 		});
 		
 		//Testen ob beim saven ein Name für das Kartenset angegeben wird
@@ -133,7 +179,6 @@ public class New_Quiz_C extends Application{
 				
 				if(saveTF.getText().isBlank())
 				{
-					
 					Alert saveAlert = new Alert(AlertType.ERROR);
 					saveAlert.setTitle("Error");
 					saveAlert.setHeaderText("No Name");
@@ -143,8 +188,20 @@ public class New_Quiz_C extends Application{
 				else
 				{
 					vocSetName = saveTF.getText();
+					saveTF.setText("");
 					saveStage.hide();
 					//In HashMap übertragen
+					Quiz quiz = new Quiz(vocSetName);
+					for(String x : cacheLHM.keySet())
+					{
+						quiz.addVocab(x, cacheLHM.get(x));
+					}
+					try {
+						backHome.start(stage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					//Zurück zu Home
 				}
 				
@@ -169,9 +226,7 @@ public class New_Quiz_C extends Application{
 		vBoxLeft.getChildren().add(saveButton);
 		
 		//Right
-		vBoxRight.getChildren().add(vocNumber);
-		
-		//Bottom
+		vBoxRight.getChildren().add(vocNumberLb);
 		
 		//Styling
 		VBox.setMargin(key, new Insets(50, 10, 10, 10));
@@ -182,7 +237,7 @@ public class New_Quiz_C extends Application{
 		vBoxLeft.setMinWidth(100);
 		vBoxLeft.setPrefWidth(150);
 		vBoxLeft.setMaxWidth(200);
-		vocNumber.setStyle("-fx-font-size: 14");
+		vocNumberLb.setStyle("-fx-font-size: 14");
 		key.setStyle("-fx-font-size: 14");
 		value.setStyle("-fx-font-size: 14");
 		home.setStyle("-fx-font-size: 14");
@@ -190,8 +245,6 @@ public class New_Quiz_C extends Application{
 		listView.setStyle("-fx-font-size: 14");
 		addButton.setStyle("-fx-font-size: 14");
 		saveButton.setStyle("-fx-font-size: 14");
-		
-		
 		
 		Scene scene = new Scene(pane, 500, 500);
 		stage.setScene(scene);
