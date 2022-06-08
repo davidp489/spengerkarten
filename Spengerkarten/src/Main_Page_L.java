@@ -1,19 +1,13 @@
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,6 +18,8 @@ import javafx.stage.Stage;
 
 public class Main_Page_L extends Application{
 
+	private int curCol = -1;
+	private int curRow = 0;
 	
 	public static void main(String[] args) 
 	{
@@ -62,24 +58,43 @@ public class Main_Page_L extends Application{
 		pane.setAlignment(Pos.CENTER);
 		
 		
-		pane.add(quizGUI("Hello"), 0, 0);
-		pane.add(quizGUI("Du"), 1, 1);
-		pane.add(quizGUI("Stinkst"), 2, 2);
+		addQuiz(pane, "1");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
+		addQuiz(pane, "1");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
+		addQuiz(pane, "1");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
+		addQuiz(pane, "1");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
+		addQuiz(pane, "keks");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
+		addQuiz(pane, "1");
+		addQuiz(pane, "2");
+		addQuiz(pane, "3");
 	} 
 	
-	private Node quizGUI(String quizName) {
+	private void addQuiz(GridPane pane, String quizName) {
+		pane.add(createQuizGUI(quizName), curCol, curRow);
+	}
+	
+	private Node createQuizGUI(String quizName) {
 		Rectangle rectangle = new Rectangle();  
 	      
 	    //Setting the properties of the rectangle 
 	    rectangle.setX(150.0f); 
 	    rectangle.setY(75.0f); 
-	    rectangle.setWidth(300.0f); 
-	    rectangle.setHeight(150.0f); 
+	    rectangle.setWidth(350.0f); 
+	    rectangle.setHeight(250.0f); 
 	       
 	    //Setting the height and width of the arc 
 	    rectangle.setArcWidth(30.0); 
 	    rectangle.setArcHeight(20.0);
-	    rectangle.setFill(Color.TURQUOISE);
+	    rectangle.setFill(Color.GREY);
 	    
 	    Text text = new Text(quizName);
 	    text.setBoundsType(TextBoundsType.VISUAL);
@@ -92,6 +107,13 @@ public class Main_Page_L extends Application{
         StackPane layout = new StackPane();
         layout.getChildren().addAll(rectangle, text);
 	    
+        // managing rows and columns
+        curCol++;
+        if(curCol>2) {
+        	curCol=0;
+        	curRow++;
+        }
+        
 	    return layout;
 	}
 }
