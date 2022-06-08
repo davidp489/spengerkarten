@@ -196,7 +196,7 @@ public class New_Quiz_C extends Application{
 						quiz.addVocab(x, cacheLHM.get(x));
 					}
 					try {
-						new Main_Page_L().uebergabe(stage, quiz);
+						new Main_Page_L().quizUebergabe(stage, quiz);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
