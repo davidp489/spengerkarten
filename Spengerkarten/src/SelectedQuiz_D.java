@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +7,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,6 +40,9 @@ public class SelectedQuiz_D extends Application
 	private Button reveal;
 	private Button hide;
 	
+	private Button yes;
+	private Button no;
+	
 	Quiz newQuiz;
 	
 	private List<String> keys;
@@ -45,6 +50,12 @@ public class SelectedQuiz_D extends Application
 	private boolean checkIfRand = false;
 	
 	private static int index = 0;
+	
+	private int note;
+	
+	private int correct = 0;
+	private int wrong = 0;
+	private float percentage;
 	
 	Main_Page_L backHome = new Main_Page_L();
 	
@@ -73,7 +84,7 @@ public class SelectedQuiz_D extends Application
 		//Die Buttons für die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
 		//Ein Element des Quizes wird hier abgebildet
-		HBox quizElement = new HBox();
+		VBox quizElement = new VBox();
 		//Hier befinden sich die Buttons 'Weiter' und 'Zurueck'
 		HBox bottomhbox = new HBox();
 		//Zeigt den live-stand der bisherigen Antworten
@@ -94,8 +105,11 @@ public class SelectedQuiz_D extends Application
 		this.random.setPrefSize(100, 30);
 		this.multipleChoice.setPrefSize(100, 30);
 		
-		this.reveal = new Button("Auflösen");
+		this.reveal = new Button("Lösung anzeigen");
 		this.hide = new Button("Verstecken");
+		
+		this.yes = new Button("Ja");
+		this.no = new Button("Nein");
 		
 		
 		this.back = new Button("Zurueck");
@@ -103,11 +117,18 @@ public class SelectedQuiz_D extends Application
 		this.continueButton = new Button("Weiter");
 		
 		
-		Label livestatlable = new Label("Live stats:");
-		Label correctAnswers = new Label("Richtige antworten: ");
-		Label wrongAnswers = new Label("Falsche antworten: ");
-		Label percentage = new Label("Richtig in %: ");
-		Label grade = new Label("Note: ");
+		Label livestatlable = new Label("Live stats: " + this.newQuiz.getName());
+		Label correctAnswers = new Label("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
+		Label wrongAnswers = new Label("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+		Label percentageCount = new Label("Richtig in %: -");
+		Label grade = new Label("Note: -");
+		
+		Label pruefung = new Label("Hast du die Antwort gewusst?");
+		Label endOfQuiz = new Label("du hast geschafft");
+		
+		//Inhalt des Elementes
+		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
+		quizKey.setPrefSize(200, 20);
 		
 		labelHome.setOnMouseClicked((e -> {
 			try {
@@ -118,11 +139,28 @@ public class SelectedQuiz_D extends Application
 			}
 		}));
 		
-		//Inhalt des Elementes
-		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
-		quizKey.setPrefSize(200, 20);
+		
 		
 		random.setOnAction((ActionEvent event) -> {
+			//Score wird zurückgesetzt
+			this.correct = 0;
+			this.wrong = 0;
+			correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
+			wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+			percentageCount.setText("Richtig in %: -");
+			grade.setText("Note: -");
+			
+			/*Checkt beim Starten vom Randomizer, ob der "Lösung anzeigen" Button noch da ist (Da er nach dem Ende des Quizzes entfernt wird) 
+			 *	wenn nein, wird er hinzugefügt. Wenn die Nachricht "endOfQuiz" beim Betätigen noch da ist, wird er entfernt
+			 *	(Die Nachricht erscheint, wenn man das Quiz fertig gemacht hat).
+			 *
+			*/
+			if(!livestats.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz))
+			{
+				livestats.getChildren().add(reveal);
+				quizElement.getChildren().remove(endOfQuiz);
+			}
+			
 			this.checkIfRand = true;
 			//Index wird automatisch auf 0 gesetzt
 			index = 0;
@@ -143,16 +181,130 @@ public class SelectedQuiz_D extends Application
 		 */
 		reveal.setOnAction((ActionEvent event) -> {
 			livestats.getChildren().remove(reveal);
-			livestats.getChildren().add(hide);
+			
 			if(checkIfRand)
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
 				quizKey.setText("Value: " + newQuiz.getValue(keys.get(index).toString()));
+				//Fügt die Buttons hinzu, womit man abpruefen kann, ob man richtig oder falsch lag
+				quizElement.getChildren().addAll(pruefung, yes, no);
 			} else
 			{
+				livestats.getChildren().add(hide);
 				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
 				quizKey.setText("Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
 			}
+		});
+		
+		yes.setOnAction((ActionEvent event) -> {
+			livestats.getChildren().add(reveal);
+			//Nach einer richtigen Antwort wird die Zahl der korrekten Antworten inkrementiert
+			correct++;
+			System.out.format("Anzahl an korrekten Antworten: %s", correct);
+			System.out.println();
+			quizElement.getChildren().removeAll(pruefung, yes, no);
+			//Setzt den Text auf den neuen Punktestand
+			correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
+			//Sobald das Ende des Quizes erreicht wird
+			if(index == newQuiz.getSize() - 1)
+			{
+				livestats.getChildren().remove(reveal);
+				quizElement.getChildren().add(endOfQuiz);
+				
+				//Rechnet das Ergebnis in Prozent aus
+				this.percentage = (float) correct / newQuiz.getSize();
+				
+				//Formattiert die Dezimalzahl in Prozent
+				NumberFormat defaultFormat = NumberFormat.getPercentInstance();
+				percentageCount.setText("Richtig in %: " + defaultFormat.format(percentage));
+				
+				//Bestimmung der Note
+				if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) < 0)
+				{
+					note = 5;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) < 0)
+				{
+					note = 4;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) < 0)
+				{
+					note = 3;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) < 0)
+				{
+					note = 2;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) > 0)
+				{
+					note = 1;
+					grade.setText("Note: " + note);
+				}
+				return;
+			}
+			index++;
+			System.out.println(index);
+			
+			
+			//Das nächste Element wird angezeigt
+			quizKey.setText("Key: " + keys.get(index).toString());
+			
+		});
+		
+		no.setOnAction((ActionEvent event) -> {
+			livestats.getChildren().add(reveal);
+			
+			//Nach einer falschen Antwort wird die Zahl der falschen Antworten inkrementiert
+			wrong++;
+			System.out.format("Anzahl an Fehler: %s", wrong);
+			System.out.println();
+			quizElement.getChildren().removeAll(pruefung, yes, no);
+			
+			//Setzt den Text auf den neuen Punktestand
+			wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+			
+			//Sobald das Ende des Quizes erreicht wird
+			if(index == newQuiz.getSize() - 1)
+			{
+				livestats.getChildren().remove(reveal);
+				quizElement.getChildren().add(endOfQuiz);
+				//Rechnet das Ergebnis in Prozent aus
+				this.percentage = (float) correct / newQuiz.getSize();
+				//Formattiert die Dezimalzahl in Prozent
+				NumberFormat defaultFormat = NumberFormat.getPercentInstance();
+				percentageCount.setText("Richtig in %: " + defaultFormat.format(percentage));
+				
+				//Bestimmung der Note
+				if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) < 0)
+				{
+					note = 5;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) < 0)
+				{
+					note = 4;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) < 0)
+				{
+					note = 3;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) < 0)
+				{
+					note = 2;
+					grade.setText("Note: " + note);
+				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) > 0)
+				{
+					note = 1;
+					grade.setText("Note: " + note);
+				}
+				return;
+			}
+			index++;
+			System.out.println(index);
+			
+			
+			//Das nächste Element wird angezeigt
+			quizKey.setText("Key: " + keys.get(index).toString());
+			
 		});
 		
 		/*Der Button 'Verstecken' wird ersetzt mit dem Button 'Aufloesen', die Frage bzw. die nicht übersetzte Vokabel wird angezeigt
@@ -236,29 +388,64 @@ public class SelectedQuiz_D extends Application
 		});
 		
 		
-		
-		
-		leftvbox.setSpacing(15);
-		bottomhbox.setSpacing(20);
-		
-		leftvbox.setPadding(new Insets(100, 0, 200, 50));
-		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
-		quizElement.setPadding(new Insets(100, 500, 0, 100));
-		
 		pane.setTop(menuBar);
 		pane.setLeft(leftvbox);
 		pane.setCenter(quizElement);
 		pane.setBottom(bottomhbox);
 		pane.setRight(livestats);
 		
+		menuBar.setStyle("-fx-background-color: #ffd0fe");
+		leftvbox.setStyle("-fx-background-color: #ffc3cb");
+		quizElement.setStyle("-fx-background-color: #ffefc8");
+		bottomhbox.setStyle("-fx-background-color: #ceffc6");
+		livestats.setStyle("-fx-background-color: #befaff");
+		
+		//Button/Livestat Styling
+		back.setStyle("-fx-font-size: 25");
+		quizname.setStyle("-fx-font-size: 25");
+		continueButton.setStyle("-fx-font-size: 25");
+		quizKey.setStyle("-fx-font-size: 30");
+		livestatlable.setStyle("-fx-font-size: 25");
+		correctAnswers.setStyle("-fx-font-size: 25");
+		wrongAnswers.setStyle("-fx-font-size: 25");
+		percentageCount.setStyle("-fx-font-size: 25");
+		grade.setStyle("-fx-font-size: 25");
+		reveal.setStyle("-fx-font-size: 25");
+		hide.setStyle("-fx-font-size: 25");
+		
+		random.setStyle("-fx-font-size: 20");
+		random.setPrefSize(200, 200);
+		
+		writeValue.setStyle("-fx-font-size: 20");
+		writeValue.setPrefSize(200, 200);
+		
+		multipleChoice.setStyle("-fx-font-size: 20");
+		multipleChoice.setPrefSize(200, 200);
+		
+		leftvbox.setSpacing(15);
+		bottomhbox.setSpacing(20);
+		
+		leftvbox.setPadding(new Insets(100, 0, 200, 50));
+		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
+		
+		
+		quizKey.setAlignment(Pos.CENTER);
+		quizElement.setAlignment(Pos.CENTER);
+		
+		
+		
+		bottomhbox.setAlignment(Pos.CENTER);
+		
+		
+		
 		
 		
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
 		bottomhbox.getChildren().addAll(back, quizname,  continueButton);
 		quizElement.getChildren().addAll(quizKey);
-		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentage, grade, reveal);
+		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade, reveal);
 		
-		scene = new Scene(pane, 1000, 720);
+		scene = new Scene(pane, 1280, 720);
 		
 		stage.setScene(scene);
 		stage.show();
