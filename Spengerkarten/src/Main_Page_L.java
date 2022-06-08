@@ -31,8 +31,11 @@ public class Main_Page_L extends Application{
 	{
 		MenuBar menuBar = new MenuBar();
 		Menu home = new Menu("Home");
+		home.setStyle("-fx-font-size: 14px");
 		Menu New = new Menu("New");
+		New.setStyle("-fx-font-size: 14px");
 		Menu load = new Menu("Load");
+		load.setStyle("-fx-font-size: 14px");
 		menuBar.getMenus().addAll(home, New, load);
 		
 		VBox root = new VBox(menuBar);
@@ -48,6 +51,10 @@ public class Main_Page_L extends Application{
 		stage.setScene(scene);
 		stage.show();
 		testGridPane(gridPane);
+	}
+	
+	public void übergeben(Stage stage, Quiz quiz) throws Exception {
+		start(stage);
 	}
 
 	

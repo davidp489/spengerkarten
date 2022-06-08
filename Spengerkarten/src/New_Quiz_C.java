@@ -1,4 +1,5 @@
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,10 +23,9 @@ import javafx.stage.Stage;
 
 public class New_Quiz_C extends Application{
 	
-	Main_Page_L backHome = new Main_Page_L();
 	String vocSetName;
 	private int vocCounter = 0;
-	HashMap<String, String> cacheLHM = new HashMap<String, String>();
+	LinkedHashMap<String, String> cacheLHM = new LinkedHashMap<String, String>();
 
 	public static void main(String[] args)
 	{
@@ -53,7 +53,6 @@ public class New_Quiz_C extends Application{
 		Button addButton = new Button("Add");
 		Button saveButton = new Button("Save");
 		Label vocNumberLb = new Label("Anzahl an Vokabeln: " + vocCounter);
-		Main_Page_L backHome = new Main_Page_L();
 		
 		
 		
@@ -131,7 +130,7 @@ public class New_Quiz_C extends Application{
 					}
 					else if(duplicateKey == true || duplicateValue == true)
 					{
-						//Hier muss nicht der Content geändert werden weil das schon oben gemacht wurde
+						//Hier muss nicht der Content geï¿½ndert werden weil das schon oben gemacht wurde
 						duplicateAlert.show();
 					}
 					else
@@ -171,7 +170,7 @@ public class New_Quiz_C extends Application{
 			saveStage.show();
 		});
 		
-		//Testen ob beim saven ein Name für das Kartenset angegeben wird
+		//Testen ob beim saven ein Name fï¿½r das Kartenset angegeben wird
 		saveB.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -190,19 +189,19 @@ public class New_Quiz_C extends Application{
 					vocSetName = saveTF.getText();
 					saveTF.setText("");
 					saveStage.hide();
-					//In HashMap übertragen
+					//In HashMap ï¿½bertragen
 					Quiz quiz = new Quiz(vocSetName);
 					for(String x : cacheLHM.keySet())
 					{
 						quiz.addVocab(x, cacheLHM.get(x));
 					}
 					try {
-						backHome.start(stage);
+						new Main_Page_L().Ã¼bergeben(stage, quiz);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					//Zurück zu Home
+					//Zurï¿½ck zu Home
 				}
 				
 			}
