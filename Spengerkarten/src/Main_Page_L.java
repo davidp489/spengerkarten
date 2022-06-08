@@ -53,7 +53,7 @@ public class Main_Page_L extends Application{
 		testGridPane(gridPane);
 	}
 	
-	public void übergeben(Stage stage, Quiz quiz) throws Exception {
+	public void uebergeben(Stage stage, Quiz quiz) throws Exception {
 		start(stage);
 	}
 
