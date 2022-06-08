@@ -4,12 +4,14 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -43,6 +45,8 @@ public class SelectedQuiz_D extends Application
 	private boolean checkIfRand = false;
 	
 	private static int index = 0;
+	
+	Main_Page_L backHome = new Main_Page_L();
 	
 	
 	
@@ -78,7 +82,8 @@ public class SelectedQuiz_D extends Application
 		pane = new BorderPane();
 		
 		MenuBar menuBar = new MenuBar();
-		Menu home = new Menu("Home");
+		Label labelHome = new Label("Home");
+		Menu home = new Menu("", labelHome);
 		menuBar.getMenus().add(home);
 		
 		this.random = new Button("Random");
@@ -104,7 +109,14 @@ public class SelectedQuiz_D extends Application
 		Label percentage = new Label("Richtig in %: ");
 		Label grade = new Label("Note: ");
 		
-		
+		labelHome.setOnMouseClicked((e -> {
+			try {
+				backHome.start(stage);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch blocksss
+				e1.printStackTrace();
+			}
+		}));
 		
 		//Inhalt des Elementes
 		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
