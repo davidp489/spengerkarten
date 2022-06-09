@@ -73,13 +73,13 @@ public class SelectedQuiz_D extends Application
 		//Test Quiz Objekt
 		newQuiz = new Quiz("quizname");
 		
-		newQuiz.addVocab("Erste", "EErste");
-		newQuiz.addVocab("Zweite", "ZZweite");
-		newQuiz.addVocab("Dritte", "DDritte");
-		newQuiz.addVocab("Vierte", "VVierte");
-		newQuiz.addVocab("Fuenfte", "FFuenfte");
-		newQuiz.addVocab("Sechste", "SSechste");
-		newQuiz.addVocab("Siebte", "SSiebte");
+		newQuiz.addVocab("Kitchen", "Küche");
+		newQuiz.addVocab("Table", "Tisch");
+		newQuiz.addVocab("House", "Haus");
+		newQuiz.addVocab("Microphone", "Mikrofon");
+		newQuiz.addVocab("Software Engineer", "Software Entwickler");
+		newQuiz.addVocab("Flower", "Blume");
+		newQuiz.addVocab("Tree", "Baum");
 		
 		//Die Buttons für die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
@@ -124,7 +124,7 @@ public class SelectedQuiz_D extends Application
 		Label grade = new Label("Note: -");
 		
 		Label pruefung = new Label("Hast du die Antwort gewusst?");
-		Label endOfQuiz = new Label("du hast geschafft");
+		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		
 		//Inhalt des Elementes
 		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
@@ -208,8 +208,9 @@ public class SelectedQuiz_D extends Application
 			//Sobald das Ende des Quizes erreicht wird
 			if(index == newQuiz.getSize() - 1)
 			{
-				livestats.getChildren().remove(reveal);
+				livestats.getChildren().removeAll(reveal);
 				quizElement.getChildren().add(endOfQuiz);
+				quizElement.getChildren().remove(quizKey);
 				
 				//Rechnet das Ergebnis in Prozent aus
 				this.percentage = (float) correct / newQuiz.getSize();
@@ -272,8 +273,9 @@ public class SelectedQuiz_D extends Application
 			//Sobald das Ende des Quizes erreicht wird
 			if(index == newQuiz.getSize() - 1)
 			{
-				livestats.getChildren().remove(reveal);
+				livestats.getChildren().removeAll(reveal);
 				quizElement.getChildren().add(endOfQuiz);
+				quizElement.getChildren().remove(quizKey);
 				//Rechnet das Ergebnis in Prozent aus
 				this.percentage = (float) correct / newQuiz.getSize();
 				//Formattiert die Dezimalzahl in Prozent als String
@@ -424,6 +426,10 @@ public class SelectedQuiz_D extends Application
 		grade.setStyle("-fx-font-size: 25");
 		reveal.setStyle("-fx-font-size: 25");
 		hide.setStyle("-fx-font-size: 25");
+		yes.setStyle("-fx-font-size: 25");
+		no.setStyle("-fx-font-size: 25");
+		pruefung.setStyle("-fx-font-size: 20");
+		endOfQuiz.setStyle("-fx-font-size: 25");
 		
 		random.setStyle("-fx-font-size: 20");
 		random.setPrefSize(200, 200);
