@@ -216,26 +216,32 @@ public class SelectedQuiz_D extends Application
 				
 				//Formattiert die Dezimalzahl in Prozent
 				NumberFormat defaultFormat = NumberFormat.getPercentInstance();
-				percentageCount.setText("Richtig in %: " + defaultFormat.format(percentage));
+				String percentageFormatted = defaultFormat.format(percentage);
+				
+				percentageCount.setText("Richtig in %: " + percentageFormatted);
 				
 				//Bestimmung der Note
-				if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) < 0)
+				if(percentage < 0.5)
 				{
 					note = 5;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) < 0)
+				} 
+				else if(percentage >= 0.5 && percentage < 0.65) 
 				{
 					note = 4;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) < 0)
+				} 
+				else if(percentage >= 0.65 && percentage < 0.8)
 				{
 					note = 3;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) < 0)
+				} 
+				else if(percentage >= 0.8 && percentage < 0.9)
 				{
 					note = 2;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) > 0)
+				} 
+				else if(percentage >= 0.9)
 				{
 					note = 1;
 					grade.setText("Note: " + note);
@@ -270,28 +276,34 @@ public class SelectedQuiz_D extends Application
 				quizElement.getChildren().add(endOfQuiz);
 				//Rechnet das Ergebnis in Prozent aus
 				this.percentage = (float) correct / newQuiz.getSize();
-				//Formattiert die Dezimalzahl in Prozent
+				//Formattiert die Dezimalzahl in Prozent als String
 				NumberFormat defaultFormat = NumberFormat.getPercentInstance();
-				percentageCount.setText("Richtig in %: " + defaultFormat.format(percentage));
+				String percentageFormatted = defaultFormat.format(percentage);
+				
+				percentageCount.setText("Richtig in %: " + percentageFormatted);
 				
 				//Bestimmung der Note
-				if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) < 0)
+				if(percentage < 0.5)
 				{
 					note = 5;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(50)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) < 0)
+				} 
+				else if(percentage >= 0.5 && percentage < 0.65) 
 				{
 					note = 4;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(65)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) < 0)
+				} 
+				else if(percentage >= 0.65 && percentage < 0.8)
 				{
 					note = 3;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(80)) > 0 && defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) < 0)
+				} 
+				else if(percentage >= 0.8 && percentage < 0.9)
 				{
 					note = 2;
 					grade.setText("Note: " + note);
-				} else if(defaultFormat.format(percentage).compareTo(defaultFormat.format(90)) > 0)
+				} 
+				else if(percentage >= 0.9)
 				{
 					note = 1;
 					grade.setText("Note: " + note);
