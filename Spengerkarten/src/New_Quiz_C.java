@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -26,6 +27,7 @@ public class New_Quiz_C extends Application{
 	String vocSetName;
 	private int vocCounter = 0;
 	LinkedHashMap<String, String> cacheLHM = new LinkedHashMap<String, String>();
+	ListView<String> listView = new ListView<String>();
 
 	public static void main(String[] args)
 	{
@@ -40,12 +42,15 @@ public class New_Quiz_C extends Application{
 		VBox vBoxRight = new VBox(); //VBox rechts
 		
 		
-		
+		Label labelHome = new Label("Home");
 		MenuBar menuBar = new MenuBar();
-		Menu home = new Menu("Home");
+		Menu home = new Menu("", labelHome);
 		Menu load = new Menu("Load");
+		MenuItem importCsv = new MenuItem("Import");
+		MenuItem exportCsv = new MenuItem("Export");
 		menuBar.getMenus().addAll(home, load);
-		ListView<String> listView = new ListView<String>();
+		load.getItems().addAll(importCsv, exportCsv);
+		//ObservableList
 		TextField key = new TextField();
 		key.setPromptText("first vocab");
 		TextField value = new TextField();
@@ -53,7 +58,7 @@ public class New_Quiz_C extends Application{
 		Button addButton = new Button("Add");
 		Button saveButton = new Button("Save");
 		Label vocNumberLb = new Label("Anzahl an Vokabeln: " + vocCounter);
-		
+				
 		
 		
 		//Hintergrund Sachen
@@ -147,7 +152,6 @@ public class New_Quiz_C extends Application{
 			}
 		});
 		
-		
 		//Bennen der Karten
 		VBox saveV = new VBox();
 		Text saveTxt = new Text("Name your Spengerkarten:");
@@ -207,6 +211,18 @@ public class New_Quiz_C extends Application{
 			}
 			
 		});
+		
+		labelHome.setOnMouseClicked(homeEvent -> {
+			Main_Page_L goHome = new Main_Page_L();
+			try {
+				goHome.start(stage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		
+		
 		
 		
 		//Main Sachen
