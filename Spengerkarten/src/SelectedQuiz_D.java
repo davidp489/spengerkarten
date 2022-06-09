@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -80,6 +81,10 @@ public class SelectedQuiz_D extends Application
 		newQuiz.addVocab("Software Engineer", "Software Entwickler");
 		newQuiz.addVocab("Flower", "Blume");
 		newQuiz.addVocab("Tree", "Baum");
+		newQuiz.addVocab("Keyboard", "Tastatur");
+		newQuiz.addVocab("Mouse", "Maus");
+		newQuiz.addVocab("Frog", "Frosch");
+		newQuiz.addVocab("Apple", "Apfel");
 		
 		//Die Buttons für die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
@@ -127,8 +132,8 @@ public class SelectedQuiz_D extends Application
 		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		
 		//Inhalt des Elementes
-		Label quizKey = new Label("Key: " + newQuiz.getKeyFromIndex(index));
-		quizKey.setPrefSize(200, 20);
+		Text quizKey = new Text("Key: " + newQuiz.getKeyFromIndex(index));
+		
 		
 		labelHome.setOnMouseClicked((e -> {
 			try {
@@ -151,14 +156,19 @@ public class SelectedQuiz_D extends Application
 			grade.setText("Note: -");
 			
 			/*Checkt beim Starten vom Randomizer, ob der "Lösung anzeigen" Button noch da ist (Da er nach dem Ende des Quizzes entfernt wird) 
-			 *	wenn nein, wird er hinzugefügt. Wenn die Nachricht "endOfQuiz" beim Betätigen noch da ist, wird er entfernt
+			 *	wenn nein, wird er hinzugefügt. 
+			 *	
+			 *	Wenn die Nachricht "endOfQuiz" beim Betätigen noch da ist, wird er entfernt
 			 *	(Die Nachricht erscheint, wenn man das Quiz fertig gemacht hat).
 			 *
+			 *	Beim erneuten Starten wird "quizKey" wieder hinzugefügt
+			 *
 			*/
-			if(!livestats.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz))
+			if(!livestats.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) && !quizElement.getChildren().contains(quizKey))
 			{
 				livestats.getChildren().add(reveal);
 				quizElement.getChildren().remove(endOfQuiz);
+				quizElement.getChildren().add(quizKey);
 			}
 			
 			this.checkIfRand = true;
@@ -447,7 +457,6 @@ public class SelectedQuiz_D extends Application
 		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
 		
 		
-		quizKey.setAlignment(Pos.CENTER);
 		quizElement.setAlignment(Pos.CENTER);
 		
 		
