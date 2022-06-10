@@ -8,7 +8,7 @@ public class Write_Value_C {
 	
 	public void start(Stage stage) throws Exception
 	{
-		System.out.println("Fortnite");
+		System.out.println("TEST!!!");
 		
 		
 	}
