@@ -13,10 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -72,7 +75,7 @@ public class SelectedQuiz_D extends Application
 	{
 		
 		//Test Quiz Objekt
-		newQuiz = new Quiz("quizname");
+		newQuiz = new Quiz("Vokabeln");
 		
 		newQuiz.addVocab("Kitchen", "Küche");
 		newQuiz.addVocab("Table", "Tisch");
@@ -86,6 +89,7 @@ public class SelectedQuiz_D extends Application
 		newQuiz.addVocab("Frog", "Frosch");
 		newQuiz.addVocab("Apple", "Apfel");
 		
+		
 		//Die Buttons für die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
 		//Ein Element des Quizes wird hier abgebildet
@@ -94,6 +98,8 @@ public class SelectedQuiz_D extends Application
 		HBox bottomhbox = new HBox();
 		//Zeigt den live-stand der bisherigen Antworten
 		VBox livestats = new VBox();
+		
+		
 		
 		pane = new BorderPane();
 		
@@ -113,12 +119,17 @@ public class SelectedQuiz_D extends Application
 		this.reveal = new Button("Lösung anzeigen");
 		this.hide = new Button("Verstecken");
 		
+		//Wird im Vertical Box "quizElement" verschachtelt
+		HBox yesnoButtons = new HBox();
+		
 		this.yes = new Button("Ja");
 		this.no = new Button("Nein");
 		
+		yesnoButtons.getChildren().addAll(yes, no);
 		
-		this.back = new Button("Zurueck");
-		Label quizname = new Label(newQuiz.getName());
+		
+		this.back = new Button("Zurück");
+		Label quizCount = new Label((index+1) + "/" + newQuiz.getSize());
 		this.continueButton = new Button("Weiter");
 		
 		
@@ -128,7 +139,7 @@ public class SelectedQuiz_D extends Application
 		Label percentageCount = new Label("Richtig in %: -");
 		Label grade = new Label("Note: -");
 		
-		Label pruefung = new Label("Hast du die Antwort gewusst?");
+		Label abpruefung = new Label("Hast du die Antwort gewusst?");
 		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		
 		//Inhalt des Elementes
@@ -147,6 +158,7 @@ public class SelectedQuiz_D extends Application
 		
 		
 		random.setOnAction((ActionEvent event) -> {
+			bottomhbox.getChildren().removeAll(continueButton, back);
 			//Score wird zurückgesetzt
 			this.correct = 0;
 			this.wrong = 0;
@@ -164,11 +176,12 @@ public class SelectedQuiz_D extends Application
 			 *	Beim erneuten Starten wird "quizKey" wieder hinzugefügt
 			 *
 			*/
-			if(!livestats.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) && !quizElement.getChildren().contains(quizKey))
+			if(!quizElement.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) 
+					&& !quizElement.getChildren().contains(quizKey))
 			{
-				livestats.getChildren().add(reveal);
 				quizElement.getChildren().remove(endOfQuiz);
 				quizElement.getChildren().add(quizKey);
+				quizElement.getChildren().add(reveal);
 			}
 			
 			this.checkIfRand = true;
@@ -184,41 +197,42 @@ public class SelectedQuiz_D extends Application
 			System.out.println();
 			//Der erste Index wird abgebildet
 			quizKey.setText("Key: " + keys.get(0).toString());
+			quizCount.setText((index+1) + "/" + newQuiz.getSize());
 		});
 		
 		/*Wenn der Button 'Aufloesen' gedrückt wird, wird die Antwort der Frage/des Vokabulars angezeigt und 
 		 * der Button wird mit dem Button 'Verstecken' ersetzt
 		 */
 		reveal.setOnAction((ActionEvent event) -> {
-			livestats.getChildren().remove(reveal);
+			quizElement.getChildren().remove(reveal);
 			
 			if(checkIfRand)
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
 				quizKey.setText("Value: " + newQuiz.getValue(keys.get(index).toString()));
 				//Fügt die Buttons hinzu, womit man abpruefen kann, ob man richtig oder falsch lag
-				quizElement.getChildren().addAll(pruefung, yes, no);
+				quizElement.getChildren().addAll(abpruefung, yesnoButtons);
 			} else
 			{
-				livestats.getChildren().add(hide);
+				quizElement.getChildren().add(hide);
 				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
 				quizKey.setText("Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
 			}
 		});
 		
 		yes.setOnAction((ActionEvent event) -> {
-			livestats.getChildren().add(reveal);
+			quizElement.getChildren().add(reveal);
 			//Nach einer richtigen Antwort wird die Zahl der korrekten Antworten inkrementiert
 			correct++;
 			System.out.format("Anzahl an korrekten Antworten: %s", correct);
 			System.out.println();
-			quizElement.getChildren().removeAll(pruefung, yes, no);
+			quizElement.getChildren().removeAll(abpruefung, yesnoButtons);
 			//Setzt den Text auf den neuen Punktestand
 			correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
 			//Sobald das Ende des Quizes erreicht wird
 			if(index == newQuiz.getSize() - 1)
 			{
-				livestats.getChildren().removeAll(reveal);
+				quizElement.getChildren().removeAll(reveal);
 				quizElement.getChildren().add(endOfQuiz);
 				quizElement.getChildren().remove(quizKey);
 				
@@ -260,22 +274,23 @@ public class SelectedQuiz_D extends Application
 				return;
 			}
 			index++;
-			System.out.println(index);
+			System.out.format("Index: %s", index);
+			System.out.println();
 			
 			
 			//Das nächste Element wird angezeigt
 			quizKey.setText("Key: " + keys.get(index).toString());
-			
+			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
 		
 		no.setOnAction((ActionEvent event) -> {
-			livestats.getChildren().add(reveal);
+			quizElement.getChildren().add(reveal);
 			
 			//Nach einer falschen Antwort wird die Zahl der falschen Antworten inkrementiert
 			wrong++;
 			System.out.format("Anzahl an Fehler: %s", wrong);
 			System.out.println();
-			quizElement.getChildren().removeAll(pruefung, yes, no);
+			quizElement.getChildren().removeAll(abpruefung, yesnoButtons);
 			
 			//Setzt den Text auf den neuen Punktestand
 			wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
@@ -283,7 +298,7 @@ public class SelectedQuiz_D extends Application
 			//Sobald das Ende des Quizes erreicht wird
 			if(index == newQuiz.getSize() - 1)
 			{
-				livestats.getChildren().removeAll(reveal);
+				quizElement.getChildren().removeAll(reveal);
 				quizElement.getChildren().add(endOfQuiz);
 				quizElement.getChildren().remove(quizKey);
 				//Rechnet das Ergebnis in Prozent aus
@@ -323,20 +338,21 @@ public class SelectedQuiz_D extends Application
 				return;
 			}
 			index++;
-			System.out.println(index);
+			System.out.format("Index: %s", index);
+			System.out.println();
 			
 			
 			//Das nächste Element wird angezeigt
 			quizKey.setText("Key: " + keys.get(index).toString());
-			
+			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
 		
 		/*Der Button 'Verstecken' wird ersetzt mit dem Button 'Aufloesen', die Frage bzw. die nicht übersetzte Vokabel wird angezeigt
 		 * 
 		 */
 		hide.setOnAction((ActionEvent event) -> {
-			livestats.getChildren().remove(hide);
-			livestats.getChildren().add(reveal);
+			quizElement.getChildren().remove(hide);
+			quizElement.getChildren().add(reveal);
 			if(checkIfRand)
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
@@ -366,6 +382,7 @@ public class SelectedQuiz_D extends Application
 				System.out.println();
 				//Die Liste mit dem Randomizer
 				quizKey.setText("Key: " + keys.get(index).toString());
+				quizCount.setText(index + "/" + newQuiz.getSize());
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
@@ -376,6 +393,7 @@ public class SelectedQuiz_D extends Application
 				System.out.println();
 				//Die Liste ohne Randomizer
 				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 			}
 				
 		});
@@ -396,6 +414,7 @@ public class SelectedQuiz_D extends Application
 				System.out.println();
 				//Die Liste mit dem Randomizer
 				quizKey.setText("Key: " + keys.get(index).toString());
+				quizCount.setText(index + "/" + newQuiz.getSize());
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
@@ -406,6 +425,7 @@ public class SelectedQuiz_D extends Application
 				System.out.println();
 				//Die Liste ohne Randomizer
 				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 			}
 			
 				
@@ -418,61 +438,54 @@ public class SelectedQuiz_D extends Application
 		pane.setBottom(bottomhbox);
 		pane.setRight(livestats);
 		
-		menuBar.setStyle("-fx-background-color: #ffd0fe");
-		leftvbox.setStyle("-fx-background-color: #ffc3cb");
-		quizElement.setStyle("-fx-background-color: #ffefc8");
-		bottomhbox.setStyle("-fx-background-color: #ceffc6");
-		livestats.setStyle("-fx-background-color: #befaff");
 		
-		//Button/Livestat Styling
-		back.setStyle("-fx-font-size: 25");
-		quizname.setStyle("-fx-font-size: 25");
-		continueButton.setStyle("-fx-font-size: 25");
+		//Styling
+		
 		quizKey.setStyle("-fx-font-size: 30");
-		livestatlable.setStyle("-fx-font-size: 25");
-		correctAnswers.setStyle("-fx-font-size: 25");
-		wrongAnswers.setStyle("-fx-font-size: 25");
-		percentageCount.setStyle("-fx-font-size: 25");
-		grade.setStyle("-fx-font-size: 25");
-		reveal.setStyle("-fx-font-size: 25");
-		hide.setStyle("-fx-font-size: 25");
-		yes.setStyle("-fx-font-size: 25");
-		no.setStyle("-fx-font-size: 25");
-		pruefung.setStyle("-fx-font-size: 20");
-		endOfQuiz.setStyle("-fx-font-size: 25");
+		abpruefung.setStyle("-fx-font-size: 20");
 		
-		random.setStyle("-fx-font-size: 20");
-		random.setPrefSize(200, 200);
 		
-		writeValue.setStyle("-fx-font-size: 20");
-		writeValue.setPrefSize(200, 200);
+		random.setPrefSize(250, 200);
 		
-		multipleChoice.setStyle("-fx-font-size: 20");
-		multipleChoice.setPrefSize(200, 200);
+		
+		writeValue.setPrefSize(250, 200);
+		
+		
+		multipleChoice.setPrefSize(250, 200);
+		
+		menuBar.setStyle("-fx-background-color: #befaff");
 		
 		leftvbox.setSpacing(15);
+		leftvbox.setPadding(new Insets(100, 25, 200, 25));
+		leftvbox.setStyle("-fx-background-color: #1e90ff; -fx-text-fill: #ffffff;");
+		
+		
+		bottomhbox.setPadding(new Insets(0, 0, 1000, 0));
 		bottomhbox.setSpacing(20);
-		
-		leftvbox.setPadding(new Insets(100, 0, 200, 50));
-		bottomhbox.setPadding(new Insets(0, 0, 1000, 200));
-		
+		bottomhbox.setAlignment(Pos.CENTER);
+		bottomhbox.setStyle("-fx-background-color: #1e90ff;");
 		
 		quizElement.setAlignment(Pos.CENTER);
+		quizElement.setSpacing(20);
 		
+		livestats.setStyle("-fx-background-color: #befaff");
+		livestats.setPadding(new Insets(0, 15, 0, 25));
 		
+		yesnoButtons.setAlignment(Pos.CENTER);
+		yesnoButtons.setSpacing(20);
 		
-		bottomhbox.setAlignment(Pos.CENTER);
 		
 		
 		
 		
 		
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
-		bottomhbox.getChildren().addAll(back, quizname,  continueButton);
-		quizElement.getChildren().addAll(quizKey);
-		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade, reveal);
+		bottomhbox.getChildren().addAll(back, quizCount,  continueButton);
+		quizElement.getChildren().addAll(quizKey, reveal);
+		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
 		
 		scene = new Scene(pane, 1280, 720);
+		scene.getStylesheets().add("Style.css");
 		
 		stage.setScene(scene);
 		stage.show();
