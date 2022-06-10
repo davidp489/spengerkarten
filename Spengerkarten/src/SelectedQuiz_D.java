@@ -222,28 +222,24 @@ public class SelectedQuiz_D
 				if(percentage < 0.5)
 				{
 					note = 5;
-					grade.setText("Note: " + note);
 				} 
 				else if(percentage >= 0.5 && percentage < 0.65) 
 				{
 					note = 4;
-					grade.setText("Note: " + note);
 				} 
 				else if(percentage >= 0.65 && percentage < 0.8)
 				{
 					note = 3;
-					grade.setText("Note: " + note);
 				} 
 				else if(percentage >= 0.8 && percentage < 0.9)
 				{
 					note = 2;
-					grade.setText("Note: " + note);
 				} 
 				else if(percentage >= 0.9)
 				{
 					note = 1;
-					grade.setText("Note: " + note);
 				}
+				grade.setText("Note: " + note);
 				return;
 			}
 			index++;
