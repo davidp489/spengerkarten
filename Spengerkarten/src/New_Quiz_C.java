@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import javafx.application.Application;
@@ -18,6 +23,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -47,9 +54,8 @@ public class New_Quiz_C extends Application{
 		Menu home = new Menu("", labelHome);
 		Menu load = new Menu("Load");
 		MenuItem importCsv = new MenuItem("Import");
-		MenuItem exportCsv = new MenuItem("Export");
 		menuBar.getMenus().addAll(home, load);
-		load.getItems().addAll(importCsv, exportCsv);
+		load.getItems().add(importCsv);
 		//ObservableList
 		TextField key = new TextField();
 		key.setPromptText("first vocab");
@@ -62,6 +68,7 @@ public class New_Quiz_C extends Application{
 		
 		
 		//Hintergrund Sachen
+		//Add Button
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -152,6 +159,55 @@ public class New_Quiz_C extends Application{
 			}
 		});
 		
+		//Import Button
+		importCsv.setOnAction(importEvent ->{
+			FileChooser fileChoose = new FileChooser();
+			fileChoose.setInitialDirectory(new File("C:\\Users\\Christoph\\Desktop"));
+			ExtensionFilter exFilter = new ExtensionFilter("CSV Files", "*.csv");
+			fileChoose.getExtensionFilters().add(exFilter);
+			File selectedFile = fileChoose.showOpenDialog(stage);
+			if(selectedFile != null)
+			{
+				try {
+					int i = 1;
+					BufferedReader br = new BufferedReader(new FileReader(selectedFile));
+					String word = "";
+					String word1 = "";
+					String word2 = "";
+					while((word = br.readLine()) != null)
+					{
+						if(i%2 == 0)
+						{
+							word1 = word;
+						}
+						else if(i%2 != 0)
+						{
+							word2 = word;
+							cacheLHM.put(word1, word2);
+							listView.getItems().add(word1 + " / " + word2);
+							//Funktioniert noch nicht ganz. Aber vertrau ich schaff das. Lukas mach hier bitte nix ich will das selber hinbekommen.
+						}
+						i++;
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				Alert fileAlert = new Alert(AlertType.ERROR);
+				fileAlert.setTitle("File Error");
+				fileAlert.setHeaderText("No File!");
+				fileAlert.setContentText("You need to choose a file");
+				fileAlert.show();
+			}
+			
+			
+			
+		});
+		
 		//Bennen der Karten
 		VBox saveV = new VBox();
 		Text saveTxt = new Text("Name your Spengerkarten:");
@@ -169,11 +225,13 @@ public class New_Quiz_C extends Application{
 		saveTF.setStyle("-fx-font-size: 14");
 		saveB.setStyle("-fx-font-size: 14");
 		
+		//Save Button
 		saveButton.setOnAction((ActionEvent saveShow) ->
 		{
 			saveStage.show();
 		});
 		
+		//Save Button (give Quiz a name)
 		//Testen ob beim saven ein Name f�r das Kartenset angegeben wird
 		saveB.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -212,6 +270,7 @@ public class New_Quiz_C extends Application{
 			
 		});
 		
+		//Go back to Home
 		labelHome.setOnMouseClicked(homeEvent -> {
 			Main_Page_L goHome = new Main_Page_L();
 			try {
@@ -221,9 +280,6 @@ public class New_Quiz_C extends Application{
 				e.printStackTrace();
 			}
 		});
-		
-		
-		
 		
 		//Main Sachen
 		pane.setTop(menuBar);
