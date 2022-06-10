@@ -5,7 +5,6 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,13 +12,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -31,7 +26,7 @@ import javafx.stage.Stage;
  *
  */
 
-public class SelectedQuiz_D extends Application
+public class SelectedQuiz_D
 {
 	private BorderPane pane;
 	Scene scene;
@@ -64,33 +59,11 @@ public class SelectedQuiz_D extends Application
 	Main_Page_L backHome = new Main_Page_L();
 	
 	
-	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
-	
-	@Override
 	public void start(Stage stage) throws Exception
 	{
 		
-		//Test Quiz Objekt
-		newQuiz = new Quiz("Vokabeln");
 		
-		newQuiz.addVocab("Kitchen", "Küche");
-		newQuiz.addVocab("Table", "Tisch");
-		newQuiz.addVocab("House", "Haus");
-		newQuiz.addVocab("Microphone", "Mikrofon");
-		newQuiz.addVocab("Software Engineer", "Software Entwickler");
-		newQuiz.addVocab("Flower", "Blume");
-		newQuiz.addVocab("Tree", "Baum");
-		newQuiz.addVocab("Keyboard", "Tastatur");
-		newQuiz.addVocab("Mouse", "Maus");
-		newQuiz.addVocab("Frog", "Frosch");
-		newQuiz.addVocab("Apple", "Apfel");
-		
-		
-		//Die Buttons für die Art, wie man das Quiz angehen will
+		//Die Buttons fï¿½r die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
 		//Ein Element des Quizes wird hier abgebildet
 		VBox quizElement = new VBox();
@@ -116,7 +89,7 @@ public class SelectedQuiz_D extends Application
 		this.random.setPrefSize(100, 30);
 		this.multipleChoice.setPrefSize(100, 30);
 		
-		this.reveal = new Button("Lösung anzeigen");
+		this.reveal = new Button("Lï¿½sung anzeigen");
 		this.hide = new Button("Verstecken");
 		
 		//Wird im Vertical Box "quizElement" verschachtelt
@@ -128,7 +101,7 @@ public class SelectedQuiz_D extends Application
 		yesnoButtons.getChildren().addAll(yes, no);
 		
 		
-		this.back = new Button("Zurück");
+		this.back = new Button("Zurï¿½ck");
 		Label quizCount = new Label((index+1) + "/" + newQuiz.getSize());
 		this.continueButton = new Button("Weiter");
 		
@@ -159,7 +132,7 @@ public class SelectedQuiz_D extends Application
 		
 		random.setOnAction((ActionEvent event) -> {
 			bottomhbox.getChildren().removeAll(continueButton, back);
-			//Score wird zurückgesetzt
+			//Score wird zurï¿½ckgesetzt
 			this.correct = 0;
 			this.wrong = 0;
 			correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
@@ -167,13 +140,13 @@ public class SelectedQuiz_D extends Application
 			percentageCount.setText("Richtig in %: -");
 			grade.setText("Note: -");
 			
-			/*Checkt beim Starten vom Randomizer, ob der "Lösung anzeigen" Button noch da ist (Da er nach dem Ende des Quizzes entfernt wird) 
-			 *	wenn nein, wird er hinzugefügt. 
+			/*Checkt beim Starten vom Randomizer, ob der "Lï¿½sung anzeigen" Button noch da ist (Da er nach dem Ende des Quizzes entfernt wird) 
+			 *	wenn nein, wird er hinzugefï¿½gt. 
 			 *	
-			 *	Wenn die Nachricht "endOfQuiz" beim Betätigen noch da ist, wird er entfernt
+			 *	Wenn die Nachricht "endOfQuiz" beim Betï¿½tigen noch da ist, wird er entfernt
 			 *	(Die Nachricht erscheint, wenn man das Quiz fertig gemacht hat).
 			 *
-			 *	Beim erneuten Starten wird "quizKey" wieder hinzugefügt
+			 *	Beim erneuten Starten wird "quizKey" wieder hinzugefï¿½gt
 			 *
 			*/
 			if(!quizElement.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) 
@@ -200,7 +173,7 @@ public class SelectedQuiz_D extends Application
 			quizCount.setText((index+1) + "/" + newQuiz.getSize());
 		});
 		
-		/*Wenn der Button 'Aufloesen' gedrückt wird, wird die Antwort der Frage/des Vokabulars angezeigt und 
+		/*Wenn der Button 'Aufloesen' gedrï¿½ckt wird, wird die Antwort der Frage/des Vokabulars angezeigt und 
 		 * der Button wird mit dem Button 'Verstecken' ersetzt
 		 */
 		reveal.setOnAction((ActionEvent event) -> {
@@ -210,7 +183,7 @@ public class SelectedQuiz_D extends Application
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
 				quizKey.setText("Value: " + newQuiz.getValue(keys.get(index).toString()));
-				//Fügt die Buttons hinzu, womit man abpruefen kann, ob man richtig oder falsch lag
+				//Fï¿½gt die Buttons hinzu, womit man abpruefen kann, ob man richtig oder falsch lag
 				quizElement.getChildren().addAll(abpruefung, yesnoButtons);
 			} else
 			{
@@ -278,7 +251,7 @@ public class SelectedQuiz_D extends Application
 			System.out.println();
 			
 			
-			//Das nächste Element wird angezeigt
+			//Das nï¿½chste Element wird angezeigt
 			quizKey.setText("Key: " + keys.get(index).toString());
 			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
@@ -342,12 +315,12 @@ public class SelectedQuiz_D extends Application
 			System.out.println();
 			
 			
-			//Das nächste Element wird angezeigt
+			//Das nï¿½chste Element wird angezeigt
 			quizKey.setText("Key: " + keys.get(index).toString());
 			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
 		
-		/*Der Button 'Verstecken' wird ersetzt mit dem Button 'Aufloesen', die Frage bzw. die nicht übersetzte Vokabel wird angezeigt
+		/*Der Button 'Verstecken' wird ersetzt mit dem Button 'Aufloesen', die Frage bzw. die nicht ï¿½bersetzte Vokabel wird angezeigt
 		 * 
 		 */
 		hide.setOnAction((ActionEvent event) -> {
@@ -366,13 +339,13 @@ public class SelectedQuiz_D extends Application
 			
 		
 			
-		//Wenn gedrückt, wird der Index erhöht und das Label wird auf den neuen Index gesetzt	
+		//Wenn gedrï¿½ckt, wird der Index erhï¿½ht und das Label wird auf den neuen Index gesetzt	
 		continueButton.setOnAction((ActionEvent event) -> {
 			if(index == newQuiz.getSize() - 1)
 			{
 				return;
 			}
-			//Sobald der Random Button gedrückt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
+			//Sobald der Random Button gedrï¿½ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
 			if(checkIfRand)
 			{
 				index++;
@@ -398,13 +371,13 @@ public class SelectedQuiz_D extends Application
 				
 		});
 			
-		//Wenn gedrückt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
+		//Wenn gedrï¿½ckt, wird der Index verringert und das Label wird auf den neuen Index gesetzt
 		back.setOnAction((ActionEvent event) -> {
 			if(index == 0)
 			{
 				return;
 			}
-			//Sobald der Random Button gedrückt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
+			//Sobald der Random Button gedrï¿½ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
 			if(checkIfRand)
 			{
 				index--;
@@ -490,6 +463,17 @@ public class SelectedQuiz_D extends Application
 		stage.setScene(scene);
 		stage.show();
 		
+	}
+	
+	public void quizUebernehmen(Stage stage, Quiz quiz) {
+		newQuiz = quiz;
+		index = 0;
+		try {
+			start(stage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	

@@ -5,6 +5,7 @@ public class Quiz {
 	
 	//Hier ist die HashMap und so drinnen (Technik hinter dem Ganzen)
 	
+
 	// Name vom Quiz
 	private String name;
 	
@@ -44,10 +45,9 @@ public class Quiz {
 		return values.size();
 	}
 	
-	// schaut ob key bzw value ein Pfad ist
-	public boolean isPath(String s) {
-		if(s.contains("\\")||s.contains("/")) return true;
-		return false;
+	@Override
+	public String toString() {
+		return "Quiz [name=" + name + ", values=" + values + "]";
 	}
 	
 }

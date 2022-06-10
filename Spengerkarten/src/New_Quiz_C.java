@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -162,13 +163,12 @@ public class New_Quiz_C extends Application{
 		//Import Button
 		importCsv.setOnAction(importEvent ->{
 			FileChooser fileChoose = new FileChooser();
-			fileChoose.setInitialDirectory(new File("C:\\Users\\Christoph\\Desktop"));
 			ExtensionFilter exFilter = new ExtensionFilter("CSV Files", "*.csv");
 			fileChoose.getExtensionFilters().add(exFilter);
 			File selectedFile = fileChoose.showOpenDialog(stage);
 			if(selectedFile != null)
 			{
-				try {
+				/*try {
 					int i = 1;
 					BufferedReader br = new BufferedReader(new FileReader(selectedFile));
 					String word = "";
@@ -185,7 +185,7 @@ public class New_Quiz_C extends Application{
 							word2 = word;
 							cacheLHM.put(word1, word2);
 							listView.getItems().add(word1 + " / " + word2);
-							//Prüfen ob doppelte drinnen sind.
+							//Prï¿½fen ob doppelte drinnen sind.
 							//Funktioniert noch nicht ganz. Aber vertrau ich schaff das. Lukas mach hier bitte nix ich will das selber hinbekommen.
 						}
 						i++;
@@ -194,7 +194,16 @@ public class New_Quiz_C extends Application{
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
+				}*/
+				
+				Quiz quiz = getQuiz(selectedFile.getAbsolutePath());
+				for(int i = 0;i<quiz.getSize();i++) {
+					String quizKey = quiz.getKeyFromIndex(i);
+					listView.getItems().add(quizKey+" / "+quiz.getValue(quizKey));
+					vocCounter = quiz.getSize();
+					vocNumberLb.setText("Anzahl an Vokabeln: " + vocCounter);
 				}
+				 
 			}
 			else
 			{
@@ -321,5 +330,25 @@ public class New_Quiz_C extends Application{
 		Scene scene = new Scene(pane, 500, 500);
 		stage.setScene(scene);
 		stage.show();
+	}
+	
+	private Quiz getQuiz(String path) {
+		String nameWithEnding = new File(path).getName();
+		Quiz quiz = new Quiz(nameWithEnding.substring(0, nameWithEnding.indexOf(".")));
+		Scanner s = null;
+		try {
+			s = new Scanner(new File(path));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		while(s.hasNextLine()) {
+			String line = s.nextLine();
+			String key = line.substring(0, line.indexOf(",")); 
+			String value = line.substring(line.indexOf(",")+1);
+			quiz.addVocab(key, value);
+		}
+		s.close();
+		return quiz;
 	}
 }
