@@ -93,6 +93,16 @@ public class New_Quiz_C extends Application{
 					errAlert.setContentText("Your second Input is emty");
 					errAlert.show();
 				}
+				else if(key == value)
+				{
+					errAlert.setContentText("first Input and second Input are the same");
+					errAlert.show();
+				}
+				else if(key.getText().contains("/") || value.getText().contains("/"))
+				{
+					errAlert.setContentText("'/' is not allowed");
+					errAlert.show();
+				}
 				else
 				{
 					boolean duplicateKey = false; //wird auf true gesetzt wenn es den Wert von key bereits im Karteikartenset gibt
@@ -197,13 +207,13 @@ public class New_Quiz_C extends Application{
 				}*/
 				
 				Quiz quiz = getQuiz(selectedFile.getAbsolutePath());
-				for(int i = 0;i<quiz.getSize();i++) {
+				for(int i = 0; i < quiz.getSize(); i++) {
 					String quizKey = quiz.getKeyFromIndex(i);
-					listView.getItems().add(quizKey+" / "+quiz.getValue(quizKey));
-					vocCounter = quiz.getSize();
-					vocNumberLb.setText("Anzahl an Vokabeln: " + vocCounter);
+					listView.getItems().add(quizKey + " / " + quiz.getValue(quizKey));
+					cacheLHM.put(quizKey, quiz.getValue(quizKey));
 				}
-				 
+				vocCounter += quiz.getSize();
+				vocNumberLb.setText("Anzahl an Vokabeln: " + vocCounter);
 			}
 			else
 			{
