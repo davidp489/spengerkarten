@@ -476,5 +476,16 @@ public class SelectedQuiz_D
 		}
 	}
 	
+	public void quizUebergeben(Stage stage)
+	{
+		Write_Value_C writeValue = new Write_Value_C();
+		try {
+			writeValue.quizUebernehmen(stage, newQuiz);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 }
