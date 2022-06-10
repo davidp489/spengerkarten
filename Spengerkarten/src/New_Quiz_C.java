@@ -185,6 +185,7 @@ public class New_Quiz_C extends Application{
 							word2 = word;
 							cacheLHM.put(word1, word2);
 							listView.getItems().add(word1 + " / " + word2);
+							//Prüfen ob doppelte drinnen sind.
 							//Funktioniert noch nicht ganz. Aber vertrau ich schaff das. Lukas mach hier bitte nix ich will das selber hinbekommen.
 						}
 						i++;
