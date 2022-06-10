@@ -111,7 +111,7 @@ public class New_Quiz_C extends Application{
 					duplicateAlert.setTitle("Error");
 					duplicateAlert.setHeaderText("Duplicate entry!");
 					
-					for(String x : cacheLHM.keySet()) //setzt duplicateEntry bei bedarf auf true
+					for(String x : cacheLHM.keySet())
 					{
 						if(key.getText().equals(x) || value.getText().equals(x))
 						{
@@ -129,7 +129,7 @@ public class New_Quiz_C extends Application{
 						}
 					}
 					
-					for(String y : cacheLHM.values()) //setzt duplicateEntry bei bedarf auf true
+					for(String y : cacheLHM.values())
 					{
 						if(value.getText().equals(y) || key.getText().equals(y))
 						{

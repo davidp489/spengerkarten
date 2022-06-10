@@ -4,11 +4,15 @@ import javafx.stage.Stage;
 public class Write_Value_C {
 	Quiz newQuiz;
 	int index = 0;
+	private int correct = 0;
+	private int wrong = 0;
+	private float percentage;
 	BorderPane bp = new BorderPane();
 	
 	public void start(Stage stage) throws Exception
 	{
 		System.out.println("TEST!!!");
+		
 		
 		
 	}
