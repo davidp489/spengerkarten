@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  *
  */
 
-public class SelectedQuiz_D
+public class SelectedQuiz_D extends Application
 {
 	private BorderPane pane;
 	Scene scene;
@@ -61,7 +61,6 @@ public class SelectedQuiz_D
 	
 	public void start(Stage stage) throws Exception
 	{
-		
 		
 		//Die Buttons f�r die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
@@ -119,7 +118,7 @@ public class SelectedQuiz_D
 		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		
 		//Inhalt des Elementes
-		Text quizKey = new Text("Key: " + newQuiz.getKeyFromIndex(index));
+		Text quizKey = new Text(newQuiz.getKeyFromIndex(index));
 		
 		
 		labelHome.setOnMouseClicked((e -> {
@@ -134,6 +133,7 @@ public class SelectedQuiz_D
 		
 		
 		random.setOnAction((ActionEvent event) -> {
+			livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
 			bottomhbox.getChildren().removeAll(continueButton, back);
 			//Score wird zur�ckgesetzt
 			this.correct = 0;
@@ -172,7 +172,7 @@ public class SelectedQuiz_D
 			System.out.format("Liste mit Randomizer: %s", keys);
 			System.out.println();
 			//Der erste Index wird abgebildet
-			quizKey.setText("Key: " + keys.get(0).toString());
+			quizKey.setText(keys.get(0).toString());
 			quizCount.setText((index+1) + "/" + newQuiz.getSize());
 		});
 		
@@ -185,14 +185,14 @@ public class SelectedQuiz_D
 			if(checkIfRand)
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
-				quizKey.setText("Value: " + newQuiz.getValue(keys.get(index).toString()));
+				quizKey.setText(newQuiz.getValue(keys.get(index).toString()));
 				//F�gt die Buttons hinzu, womit man abpruefen kann, ob man richtig oder falsch lag
 				quizElement.getChildren().addAll(abpruefung, yesnoButtons);
 			} else
 			{
 				quizElement.getChildren().add(hide);
 				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
-				quizKey.setText("Value: " + newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
+				quizKey.setText(newQuiz.getValue(newQuiz.getKeyFromIndex(index)));
 			}
 		});
 		
@@ -251,7 +251,7 @@ public class SelectedQuiz_D
 			
 			
 			//Das n�chste Element wird angezeigt
-			quizKey.setText("Key: " + keys.get(index).toString());
+			quizKey.setText(keys.get(index).toString());
 			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
 		
@@ -311,7 +311,7 @@ public class SelectedQuiz_D
 			
 			
 			//Das n�chste Element wird angezeigt
-			quizKey.setText("Key: " + keys.get(index).toString());
+			quizKey.setText(keys.get(index).toString());
 			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 		});
 		
@@ -324,11 +324,11 @@ public class SelectedQuiz_D
 			if(checkIfRand)
 			{
 				//Nimmt die Liste, wenn sie mit einem Randomizer versehen ist
-				quizKey.setText("Key: " + keys.get(index).toString());
+				quizKey.setText(keys.get(index).toString());
 			} else
 			{
 				//Andernfalls nimmt die Liste mit der richtigen Reihenfolge 
-				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+				quizKey.setText(newQuiz.getKeyFromIndex(index));
 			}
 		});
 			
@@ -349,7 +349,7 @@ public class SelectedQuiz_D
 				System.out.format("Liste mit Randomizer: %s", keys);
 				System.out.println();
 				//Die Liste mit dem Randomizer
-				quizKey.setText("Key: " + keys.get(index).toString());
+				quizKey.setText(keys.get(index).toString());
 				quizCount.setText(index + "/" + newQuiz.getSize());
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
@@ -360,7 +360,7 @@ public class SelectedQuiz_D
 				System.out.format("Liste: %s", newQuiz.getMap());
 				System.out.println();
 				//Die Liste ohne Randomizer
-				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+				quizKey.setText(newQuiz.getKeyFromIndex(index));
 				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 			}
 				
@@ -381,7 +381,7 @@ public class SelectedQuiz_D
 				System.out.format("Liste mit Randomizer: %s", keys);
 				System.out.println();
 				//Die Liste mit dem Randomizer
-				quizKey.setText("Key: " + keys.get(index).toString());
+				quizKey.setText(keys.get(index).toString());
 				quizCount.setText(index + "/" + newQuiz.getSize());
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
@@ -392,7 +392,7 @@ public class SelectedQuiz_D
 				System.out.format("Liste: %s", newQuiz.getMap());
 				System.out.println();
 				//Die Liste ohne Randomizer
-				quizKey.setText("Key: " + newQuiz.getKeyFromIndex(index));
+				quizKey.setText(newQuiz.getKeyFromIndex(index));
 				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 			}
 			
@@ -438,7 +438,7 @@ public class SelectedQuiz_D
 		leftvbox.setStyle("-fx-background-color: #1e90ff; -fx-text-fill: #ffffff;");
 		
 		
-		bottomhbox.setPadding(new Insets(0, 0, 1000, 0));
+		bottomhbox.setPadding(new Insets(20, 0, 1000, 0));
 		bottomhbox.setSpacing(20);
 		bottomhbox.setAlignment(Pos.CENTER);
 		bottomhbox.setStyle("-fx-background-color: #1e90ff;");
@@ -446,7 +446,7 @@ public class SelectedQuiz_D
 		quizElement.setAlignment(Pos.CENTER);
 		quizElement.setSpacing(20);
 		
-		livestats.setStyle("-fx-background-color: #befaff");
+		livestats.setStyle("-fx-background-color: #1e90ff");
 		livestats.setPadding(new Insets(0, 15, 0, 25));
 		
 		yesnoButtons.setAlignment(Pos.CENTER);
@@ -460,7 +460,6 @@ public class SelectedQuiz_D
 		leftvbox.getChildren().addAll(random, writeValue, multipleChoice);
 		bottomhbox.getChildren().addAll(back, quizCount,  continueButton);
 		quizElement.getChildren().addAll(quizKey, reveal);
-		livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
 		
 		scene = new Scene(pane, 1280, 720);
 		scene.getStylesheets().add("Style.css");
