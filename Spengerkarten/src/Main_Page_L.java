@@ -30,7 +30,7 @@ import javafx.stage.Stage;
 
 public class Main_Page_L extends Application{
 
-	public static final String PATH = "S";
+	public static final String PATH = "Spengerkarten\\src\\csvFiles";
 	private GridPane gridPane;
 	private int curCol = -1;
 	private int curRow = 0;

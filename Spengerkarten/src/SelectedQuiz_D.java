@@ -84,6 +84,9 @@ public class SelectedQuiz_D
 		this.random = new Button("Random");
 		this.writeValue = new Button("Starten");
 		this.multipleChoice = new Button("Multiple Choice");
+		this.multipleChoice.setOnAction(e->{
+			new Multiple_Choice_L().quizUebergabe(stage, newQuiz);
+		});
 		
 		this.writeValue.setPrefSize(100, 30);
 		this.random.setPrefSize(100, 30);
