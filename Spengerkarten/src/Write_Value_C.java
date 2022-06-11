@@ -20,6 +20,7 @@ public class Write_Value_C extends Application{
 		launch(args);
 	}
 	
+	//Bin nicht mehr dazu gekommen wegen dem edit Button. Das war echt schwer
 	public void start(Stage stage) throws Exception
 	{
 		BorderPane pane = new BorderPane();

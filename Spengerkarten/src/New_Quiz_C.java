@@ -3,10 +3,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -33,14 +37,11 @@ import javafx.stage.Stage;
 public class New_Quiz_C extends Application{
 	
 	String vocSetName;
+	int selectedIndex = -1;
+	boolean cheange = true;
 	private int vocCounter = 0;
 	LinkedHashMap<String, String> cacheLHM = new LinkedHashMap<String, String>();
 	ListView<String> listView = new ListView<String>();
-
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -65,7 +66,8 @@ public class New_Quiz_C extends Application{
 		Button addButton = new Button("Add");
 		Button saveButton = new Button("Save");
 		Label vocNumberLb = new Label("Anzahl an Vokabeln: " + vocCounter);
-				
+		Button removeButton = new Button("Remove");
+		removeButton.setDisable(true);
 		
 		
 		//Hintergrund Sachen
@@ -93,15 +95,44 @@ public class New_Quiz_C extends Application{
 					errAlert.setContentText("Your second Input is emty");
 					errAlert.show();
 				}
-				else if(key == value)
+				else if(key.getText().equals(value.getText()))
 				{
 					errAlert.setContentText("first Input and second Input are the same");
 					errAlert.show();
 				}
 				else if(key.getText().contains("/") || value.getText().contains("/"))
 				{
-					errAlert.setContentText("'/' is not allowed");
+					errAlert.setContentText("\"/\" is not allowed");
 					errAlert.show();
+				}
+				else if(selectedIndex != -1)
+				{
+					//String selectedKey = new ArrayList<String>(cacheLHM.keySet()).get(selectedIndex);
+					LinkedHashMap<String, String> saveLHM = new LinkedHashMap<String, String>();
+					listView.getItems().clear();
+					int i = 0;
+					for(String word : cacheLHM.keySet())
+					{
+						if(i == selectedIndex)
+						{
+							saveLHM.put(key.getText(), value.getText());
+							listView.getItems().add(key.getText() + " / " + value.getText());
+						}
+						else
+						{
+							saveLHM.put(word, cacheLHM.get(word));
+							listView.getItems().add(word + " / " + cacheLHM.get(word));
+						}
+						i++;
+					}
+					cacheLHM.clear();
+					cacheLHM = saveLHM;
+					System.out.println(cacheLHM);
+					key.setText("");
+					value.setText("");
+					
+					selectedIndex = -1;
+					
 				}
 				else
 				{
@@ -146,7 +177,13 @@ public class New_Quiz_C extends Application{
 						}
 					}
 					
-					if(duplicateKey == true && duplicateValue == true)
+					if(key.getText().equals(value.getText()))
+					{
+						duplicateAlert.setHeaderText("Same entry");
+						duplicateAlert.setContentText("Das erste und zweite Wort sind gleich");
+						duplicateAlert.show();
+					}
+					else if(duplicateKey == true && duplicateValue == true)
 					{
 						duplicateAlert.setContentText("Diese Karteikarte existiert bereits");
 						duplicateAlert.show();
@@ -169,6 +206,53 @@ public class New_Quiz_C extends Application{
 				}
 			}
 		});
+		
+			//Edit
+			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+				
+				
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					//aufteilen in firstWord und secondWord
+					String[] vocabWords;
+					String firstWord = "";
+					String secondWord = "";
+					if(listView.getSelectionModel().getSelectedItem() != null)
+					{
+						vocabWords = listView.getSelectionModel().getSelectedItem().split("/");
+						firstWord = vocabWords[0].substring(0, vocabWords[0].length() - 1);
+						secondWord = vocabWords[1].substring(1);
+						System.out.println(firstWord);
+						System.out.println(secondWord);
+					
+						//Ändern
+						selectedIndex = listView.getSelectionModel().getSelectedIndex();
+						key.setText(firstWord);
+						value.setText(secondWord);
+						
+						//Remove Button
+						removeButton.setDisable(false);
+						removeButton.setOnAction(removeEvent -> {
+							System.out.println(listView.getSelectionModel().getSelectedItem());
+							listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+							listView.setStyle("-fx-disabled-opacity");
+							listView.setStyle("-fx-font-size: 14");
+							key.setText("");
+							value.setText("");
+							removeButton.setDisable(true);
+							listView.getSelectionModel().select(null);
+							//Funktioniert noch nicht ganz. Fügt danach immer das Wort an erster Stelle ginzu :/
+							vocCounter--;
+							vocNumberLb.setText("Anzahl an Vokabeln: " + Integer.toString(vocCounter));
+						});
+					}
+					else
+					{
+						removeButton.setDisable(true);
+					}
+				}
+				
+			});
 		
 		//Import Button
 		importCsv.setOnAction(importEvent ->{
@@ -223,9 +307,6 @@ public class New_Quiz_C extends Application{
 				fileAlert.setContentText("You need to choose a file");
 				fileAlert.show();
 			}
-			
-			
-			
 		});
 		
 		//Bennen der Karten
@@ -241,6 +322,7 @@ public class New_Quiz_C extends Application{
 		saveStage.setScene(save);
 		saveV.getChildren().addAll(saveTxt, saveTF, saveB);
 		VBox.setMargin(saveTF, new Insets(10));
+		removeButton.setStyle("-fx-font-size: 14");
 		saveV.setStyle("-fx-font-size: 14");
 		saveTF.setStyle("-fx-font-size: 14");
 		saveB.setStyle("-fx-font-size: 14");
@@ -266,7 +348,7 @@ public class New_Quiz_C extends Application{
 					saveAlert.setContentText("Please enter a Name");
 					saveAlert.show();
 				}
-				else if(cacheLHM.size() < 3)
+				else if(cacheLHM.size() <= 5)
 				{
 					Alert saveAlert = new Alert(AlertType.ERROR);
 					saveAlert.setTitle("Error");
@@ -316,13 +398,10 @@ public class New_Quiz_C extends Application{
 		pane.setRight(vBoxRight);
 	
 		//Center
-		vBoxCenter.getChildren().add(listView);
+		vBoxCenter.getChildren().addAll(listView, removeButton);
 		
 		//Left
-		vBoxLeft.getChildren().add(key);
-		vBoxLeft.getChildren().add(value);
-		vBoxLeft.getChildren().add(addButton);
-		vBoxLeft.getChildren().add(saveButton);
+		vBoxLeft.getChildren().addAll(key, value, addButton, saveButton);
 		
 		//Right
 		vBoxRight.getChildren().add(vocNumberLb);
