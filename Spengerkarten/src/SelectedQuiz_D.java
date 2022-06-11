@@ -58,22 +58,9 @@ public class SelectedQuiz_D extends Application
 	
 	Main_Page_L backHome = new Main_Page_L();
 	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
 	
 	public void start(Stage stage) throws Exception
 	{
-		newQuiz = new Quiz("Fortnite");
-		
-		newQuiz.addVocab("Software Engineer", "Software Entwickler");
-		newQuiz.addVocab("Flower", "Blume");
-		newQuiz.addVocab("Tree", "Baum");
-		newQuiz.addVocab("Keyboard", "Tastatur");
-		newQuiz.addVocab("Mouse", "Maus");
-		newQuiz.addVocab("Frog", "Frosch");
-		newQuiz.addVocab("Apple", "Apfel");
 		
 		//Die Buttons f�r die Art, wie man das Quiz angehen will
 		VBox leftvbox = new VBox();
