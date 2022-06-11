@@ -133,7 +133,6 @@ public class SelectedQuiz_D extends Application
 		
 		
 		random.setOnAction((ActionEvent event) -> {
-			livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
 			bottomhbox.getChildren().removeAll(continueButton, back);
 			//Score wird zur�ckgesetzt
 			this.correct = 0;
@@ -152,12 +151,18 @@ public class SelectedQuiz_D extends Application
 			 *	Beim erneuten Starten wird "quizKey" wieder hinzugef�gt
 			 *
 			*/
+			if(livestats.getChildren().isEmpty())
+			{
+				livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
+			}
+			
 			if(!quizElement.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) 
 					&& !quizElement.getChildren().contains(quizKey))
 			{
 				quizElement.getChildren().remove(endOfQuiz);
 				quizElement.getChildren().add(quizKey);
 				quizElement.getChildren().add(reveal);
+				
 			}
 			
 			this.checkIfRand = true;
