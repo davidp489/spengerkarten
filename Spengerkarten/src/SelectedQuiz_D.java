@@ -399,6 +399,16 @@ public class SelectedQuiz_D
 				
 		});
 		
+		writeValue.setOnAction(e ->{
+			Write_Value_C writeValue = new Write_Value_C();
+			try {
+				writeValue.quizUebernehmen(stage, newQuiz);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
 		
 		pane.setTop(menuBar);
 		pane.setLeft(leftvbox);
@@ -465,17 +475,6 @@ public class SelectedQuiz_D
 		index = 0;
 		try {
 			start(stage);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void quizUebergeben(Stage stage)
-	{
-		Write_Value_C writeValue = new Write_Value_C();
-		try {
-			writeValue.quizUebernehmen(stage, newQuiz);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

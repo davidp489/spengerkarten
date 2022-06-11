@@ -266,6 +266,14 @@ public class New_Quiz_C extends Application{
 					saveAlert.setContentText("Please enter a Name");
 					saveAlert.show();
 				}
+				else if(cacheLHM.size() < 3)
+				{
+					Alert saveAlert = new Alert(AlertType.ERROR);
+					saveAlert.setTitle("Error");
+					saveAlert.setHeaderText("Quiz to small");
+					saveAlert.setContentText("Please make more entries");
+					saveAlert.show();
+				}
 				else
 				{
 					vocSetName = saveTF.getText();

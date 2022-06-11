@@ -175,9 +175,7 @@ public class Main_Page_L extends Application{
 	private Node createQuizGUI(Stage stage, Quiz quiz) {
 		Rectangle rectangle = new Rectangle();  
 	      
-	    //Setting the properties of the rectangle 
-	    rectangle.setX(150.0f); 
-	    rectangle.setY(75.0f); 
+	    //Setting the properties of the rectangle
 	    rectangle.setWidth(350.0f); 
 	    rectangle.setHeight(250.0f); 
 	       
@@ -187,7 +185,7 @@ public class Main_Page_L extends Application{
 	    rectangle.setFill(Color.GREY);
 	    
 	    Text text = new Text(quiz.getName());
-	    text.setBoundsType(TextBoundsType.VISUAL);
+	    //text.setBoundsType(TextBoundsType.VISUAL); //?
         text.setStyle(
                 "-fx-font-family: \"Times New Roman\";" +
                 "-fx-font-style: italic;" +

@@ -139,7 +139,7 @@ public class Multiple_Choice_L {
 		percentaLabel = new Label("Richtig in %: -");
 		grade = new Label("Note: -");
 		VBox livestats = new VBox();
-		livestats.getChildren().addAll(livestLabel, 
+		livestats.getChildren().addAll(livestLabel,
 				correctAnswLabel, wrongAnsLabel, percentaLabel, 
 				grade);
 		livestats.setStyle("-fx-font-size: 25px;-fx-background-color: #8cbdbc;");
@@ -244,7 +244,7 @@ public class Multiple_Choice_L {
 		else if(roundedPercentage >= 50 && roundedPercentage < 65) grade = 4;
 		else if(roundedPercentage >= 65 && roundedPercentage < 80) grade = 3;
 		else if(roundedPercentage >= 80 && roundedPercentage < 90) grade = 2;
-		else if(roundedPercentage >= 0.9) grade = 1;
+		else if(roundedPercentage >= 90) grade = 1;
 		
 		this.grade.setText("Note: "+grade);
 		
