@@ -5,11 +5,13 @@ import java.util.Set;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -38,10 +40,11 @@ public class Write_Value_C extends Application{
 		VBox vBoxRight = new VBox(); //VBox rechts
 		HBox hBoxCenter = new HBox();
 		
+		
 		Label labelHome = new Label("Home");
 		MenuBar menuBar = new MenuBar();
 		Menu home = new Menu("", labelHome);
-		menuBar.getMenus().addAll(home);
+		menuBar.getMenus().add(home);
 		labelHome.setStyle("-fx-font-size: 14");
 		Label showText = new Label();
 		TextField writeAnswer = new TextField();
@@ -54,12 +57,11 @@ public class Write_Value_C extends Application{
 		Label wrongAnswers = new Label("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
 		Label percentageCount = new Label("Richtig in %: -");
 		Label grade = new Label("Note: -");
-		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		Set<String> keyList = new HashSet<String>();
 		
 		
 		getRandKey(keyList, showText);
-		okButton.setDisable(true);
+		okButton.setVisible(false);
 		checkButton.setOnAction(checkEvent -> {
 			
 			if(newQuiz.getValue(showText.getText()).equalsIgnoreCase(writeAnswer.getText())) //Checkt ob der Key aus dem Label mit dem Value aus dem eingegebenen Text zusammen passt
@@ -81,16 +83,23 @@ public class Write_Value_C extends Application{
 			{
 				if(index == newQuiz.getSize() - 1)
 				{
+					okButton.setVisible(true);
+					writeAnswer.setText("");
+					writeAnswer.setDisable(true);
 					wrong++;
 					wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
 					index++;
 					showText.setText(showText.getText() + " = " + newQuiz.getValue(showText.getText()));
 					calculateGrade(percentageCount, grade);
 					checkButton.setDisable(true);
+					okButton.setOnAction(okEvent ->{
+						checkButton.setDisable(true);
+						showText.setText("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
+					});
 				}
 				else
 				{
-					okButton.setDisable(false);
+					okButton.setVisible(true);
 					checkButton.setDisable(true);
 					writeAnswer.setText("");
 					wrong++;
@@ -100,7 +109,7 @@ public class Write_Value_C extends Application{
 					okButton.setOnAction(okEvent -> {
 						getRandKey(keyList, showText);
 						checkButton.setDisable(false);
-						okButton.setDisable(true);
+						okButton.setVisible(false);
 					});
 				}
 			}
@@ -115,7 +124,7 @@ public class Write_Value_C extends Application{
 		pane.setRight(vBoxRight);
 		
 		//Top
-		pane.getChildren().add(menuBar);
+		pane.setTop(menuBar);
 		
 		//Center
 		vBoxCenter.getChildren().addAll(showText, writeAnswer);
@@ -132,8 +141,12 @@ public class Write_Value_C extends Application{
 		checkButton.setStyle("-fx-font-size: 14");
 		vBoxCenter.setPadding(new Insets(70, 10, 10, 150));
 		vBoxRight.setStyle("-fx-background-color: #75c9ea");
+		showText.setStyle("-fx-font-size: 20");
+		showText.setAlignment(Pos.CENTER);
 		
-		Scene scene = new Scene(pane, 500, 500);
+		
+		//Test
+		Scene scene = new Scene(pane, 2000, 1000);
 		stage.setScene(scene);
 		stage.show();
 	}
