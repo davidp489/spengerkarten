@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -33,7 +34,7 @@ public class Write_Value_C extends Application{
 		BorderPane pane = new BorderPane();
 		VBox vBoxCenter = new VBox(); //VBox center
 		VBox vBoxRight = new VBox(); //VBox rechts
-		
+		HBox hBoxCenter = new HBox();
 		
 		Label showText = new Label();
 		TextField writeAnswer = new TextField();
@@ -52,12 +53,11 @@ public class Write_Value_C extends Application{
 		
 		
 		getRandKey(keyList, showText);
-			
+		okButton.setDisable(true);
 		checkButton.setOnAction(checkEvent -> {
 			
 			if(newQuiz.getValue(showText.getText()).equalsIgnoreCase(writeAnswer.getText())) //Checkt ob der Key aus dem Label mit dem Value aus dem eingegebenen Text zusammen passt
 			{
-				
 				getRandKey(keyList, showText);
 				writeAnswer.setText("");
 				correct++;
@@ -73,17 +73,24 @@ public class Write_Value_C extends Application{
 		}
 			else
 			{
-				writeAnswer.setText("");
-				wrong++;
-				wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
 				if(index == newQuiz.getSize() - 1)
 				{
 					calculateGrade(percentageCount, grade);
 				}
 				else
 				{
+					okButton.setDisable(false);
+					checkButton.setDisable(true);
+					writeAnswer.setText("");
+					wrong++;
+					wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
 					index++;
-					getRandKey(keyList, showText);
+					showText.setText(showText.getText() + " = " + newQuiz.getValue(showText.getText()));
+					okButton.setOnAction(okEvent -> {
+						getRandKey(keyList, showText);
+						checkButton.setDisable(false);
+						okButton.setDisable(true);
+					});
 				}
 			}
 		});
@@ -97,7 +104,9 @@ public class Write_Value_C extends Application{
 		pane.setRight(vBoxRight);
 		
 		//Center
-		vBoxCenter.getChildren().addAll(showText, writeAnswer, checkButton);
+		vBoxCenter.getChildren().addAll(showText, writeAnswer);
+		vBoxCenter.getChildren().add(hBoxCenter);
+		hBoxCenter.getChildren().addAll(checkButton, okButton);
 		
 		//Right
 		vBoxRight.getChildren().addAll(liveStatLabel, correctAnswers, wrongAnswers, percentageCount, grade);
