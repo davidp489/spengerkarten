@@ -16,7 +16,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -129,6 +132,12 @@ public class Main_Page_L extends Application{
 		setupGridPane();
 		// get all quizzes and add them
 		getQuizzesFromPath(stage);
+		
+		
+		
+		//Styling
+		menuBar.setStyle("-fx-background-color: #1abc9c");
+		root.setStyle("-fx-background-color: #FFFFFF");
 	}
 	
 	public void quizUebergabe(Stage stage, Quiz quiz) throws Exception {
@@ -233,6 +242,8 @@ public class Main_Page_L extends Application{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	private Quiz getQuiz(String path) {

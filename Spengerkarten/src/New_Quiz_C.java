@@ -195,7 +195,9 @@ public class New_Quiz_C extends Application{
 					}
 					else
 					{
+						System.out.println("Hier1");
 						listView.getItems().add(key.getText()+ " / " + value.getText());
+						System.out.println("Hier2");
 						cacheLHM.put(key.getText(), value.getText());
 						vocCounter++;
 						vocNumberLb.setText("Anzahl an Vokabeln: " + Integer.toString(vocCounter));
@@ -234,16 +236,22 @@ public class New_Quiz_C extends Application{
 						removeButton.setDisable(false);
 						removeButton.setOnAction(removeEvent -> {
 							System.out.println(listView.getSelectionModel().getSelectedItem());
+							String[] getKey = listView.getSelectionModel().getSelectedItem().split(" ");
 							listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
-							listView.setStyle("-fx-disabled-opacity");
-							listView.setStyle("-fx-font-size: 14");
+							cacheLHM.remove(getKey[0]);
 							key.setText("");
 							value.setText("");
 							removeButton.setDisable(true);
-							listView.getSelectionModel().select(null);
-							//Funktioniert noch nicht ganz. Fügt danach immer das Wort an erster Stelle ginzu :/
+							System.out.println(cacheLHM);
+							listView.getItems().clear();
+							
+							for(String word : cacheLHM.keySet())
+							{
+								listView.getItems().add(word + " / " + cacheLHM.get(word));
+							}
 							vocCounter--;
 							vocNumberLb.setText("Anzahl an Vokabeln: " + Integer.toString(vocCounter));
+							selectedIndex = -1;
 						});
 					}
 					else
