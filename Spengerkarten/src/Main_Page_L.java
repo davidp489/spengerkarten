@@ -16,6 +16,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -126,6 +127,7 @@ public class Main_Page_L extends Application{
 		noQuizzesLabel.setStyle("-fx-font-size: 25px");
 		gridPane.add(noQuizzesLabel, 0, 0);
 		
+		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		Scene scene = new Scene(pane, 1500, 720);
 		stage.setScene(scene);
 		stage.show();

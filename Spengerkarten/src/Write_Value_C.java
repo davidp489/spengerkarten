@@ -13,6 +13,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -145,7 +146,7 @@ public class Write_Value_C extends Application{
 		showText.setAlignment(Pos.CENTER);
 		
 		
-		//Test
+		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		Scene scene = new Scene(pane, 2000, 1000);
 		stage.setScene(scene);
 		stage.show();

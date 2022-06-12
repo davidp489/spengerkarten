@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -145,6 +146,7 @@ public class Multiple_Choice_L {
 		livestats.setStyle("-fx-font-size: 25px;-fx-background-color: #8cbdbc;");
 		borderPane.setRight(livestats);
 		
+		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		Scene scene = new Scene(borderPane, 1500, 720);
 		stage.setScene(scene);
 		stage.show();

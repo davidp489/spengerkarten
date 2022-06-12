@@ -25,6 +25,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -431,6 +432,7 @@ public class New_Quiz_C extends Application{
 		addButton.setStyle("-fx-font-size: 14");
 		saveButton.setStyle("-fx-font-size: 14");
 		
+		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		Scene scene = new Scene(pane, 500, 500);
 		stage.setScene(scene);
 		stage.show();

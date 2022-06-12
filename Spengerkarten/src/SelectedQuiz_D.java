@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -385,6 +386,7 @@ public class SelectedQuiz_D extends Application
 		bottomhbox.getChildren().addAll(back, quizCount,  continueButton);
 		quizElement.getChildren().addAll(quizKey, reveal);
 		
+		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		scene = new Scene(pane, 1280, 720);
 		scene.getStylesheets().add("Style.css");
 		
