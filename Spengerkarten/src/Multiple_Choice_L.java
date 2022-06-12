@@ -45,12 +45,14 @@ public class Multiple_Choice_L {
 		BorderPane borderPane = new BorderPane();
 		borderPane.setTop(bar);
 		FlowPane pane = new FlowPane(Orientation.VERTICAL);
+		Button backSelectedQuiz = new Button("<- Back");
 		pane.setPrefSize(500, 500);
 		pane.setStyle("-fx-background-color: grey");
 		HBox box = new HBox(pane);
 		box.setStyle("-fx-background-color: lightgrey");
 		box.setAlignment(Pos.CENTER);
 		borderPane.setCenter(box);
+		VBox vBoxLeft = new VBox();
 		key = new Label("key");
 		FlowPane paneForKey = new FlowPane();
 		paneForKey.setAlignment(Pos.CENTER);
@@ -134,6 +136,11 @@ public class Multiple_Choice_L {
 			}
 		});
 		
+		backSelectedQuiz.setOnAction(backSelectedQuizEvent ->{
+			SelectedQuiz_D goSelectedQuiz = new SelectedQuiz_D();
+			goSelectedQuiz.quizUebernehmen(stage, quiz);
+		});
+		
 		livestLabel = new Label("Live stats: " + this.quiz.getName());
 		correctAnswLabel = new Label("Richtige antworten: " + this.right + "/" + this.quiz.getSize());
 		wrongAnsLabel = new Label("Falsche antworten: " + this.wrong + "/" + this.quiz.getSize());
@@ -145,7 +152,12 @@ public class Multiple_Choice_L {
 				grade);
 		livestats.setStyle("-fx-font-size: 25px;-fx-background-color: #8cbdbc;");
 		borderPane.setRight(livestats);
+		borderPane.setLeft(vBoxLeft);
+		vBoxLeft.getChildren().add(backSelectedQuiz);
 		
+		backSelectedQuiz.setStyle("-fx-font-size: 20");
+		vBoxLeft.setStyle("-fx-background-color: lightgrey");
+		bar.setStyle("-fx-background-color: #1abc9c");
 		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		Scene scene = new Scene(borderPane, 1500, 720);
 		stage.setScene(scene);

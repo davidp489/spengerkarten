@@ -135,11 +135,8 @@ public class Main_Page_L extends Application{
 		// get all quizzes and add them
 		getQuizzesFromPath(stage);
 		
-		
-		
 		//Styling
 		menuBar.setStyle("-fx-background-color: #1abc9c");
-		root.setStyle("-fx-background-color: #FFFFFF");
 	}
 	
 	public void quizUebergabe(Stage stage, Quiz quiz) throws Exception {

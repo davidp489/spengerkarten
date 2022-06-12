@@ -87,7 +87,7 @@ public class SelectedQuiz_D extends Application
 		this.randomBtn.setPrefSize(100, 30);
 		this.multipleChoiceBtn.setPrefSize(100, 30);
 		
-		this.revealBtn = new Button("Lï¿½sung anzeigen");
+		this.revealBtn = new Button("Lösung anzeigen");
 		this.hideBtn = new Button("Verstecken");
 		
 		//Wird im Vertical Box "quizElement" verschachtelt
@@ -99,7 +99,7 @@ public class SelectedQuiz_D extends Application
 		yesnoButtons.getChildren().addAll(yesBtn, noBtn);
 		
 		
-		this.back = new Button("Zurï¿½ck");
+		this.back = new Button("Zurück");
 		this.quizElementNumberLabel = new Label((index+1) + "/" + newQuiz.getSize());
 		this.continueBtn = new Button("Weiter");
 		
@@ -389,7 +389,6 @@ public class SelectedQuiz_D extends Application
 		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
 		scene = new Scene(pane, 1500, 720);
 		scene.getStylesheets().add("Style.css");
-		
 		stage.setScene(scene);
 		stage.show();
 		

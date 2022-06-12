@@ -28,11 +28,6 @@ public class Write_Value_C extends Application{
 	int note = 0;
 	float percentage;
 	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
-	
 	//Bin nicht mehr dazu gekommen wegen dem edit Button. Das war echt schwer
 	public void start(Stage stage) throws Exception
 	{
@@ -41,8 +36,7 @@ public class Write_Value_C extends Application{
 		VBox vBoxRight = new VBox(); //VBox rechts
 		VBox vBoxLeft = new VBox(); //VBox links
 		HBox hBoxCenter = new HBox();
-		Button backHome = new Button();
-		Button backSelectedQuiz = new Button();
+		Button backSelectedQuiz = new Button("<- Back");
 		
 		
 		Label labelHome = new Label("Home");
@@ -99,6 +93,7 @@ public class Write_Value_C extends Application{
 					okButton.setOnAction(okEvent ->{
 						checkButton.setDisable(true);
 						showText.setText("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
+						okButton.setVisible(false);
 					});
 				}
 				else
@@ -119,7 +114,7 @@ public class Write_Value_C extends Application{
 			}
 		});
 		
-		backHome.setOnAction(homeEvent ->{
+		labelHome.setOnMouseClicked(homeEvent ->{
 			Main_Page_L goHome = new Main_Page_L();
 			try {
 				goHome.start(stage);
@@ -138,6 +133,7 @@ public class Write_Value_C extends Application{
 		//Main
 		pane.setCenter(vBoxCenter);
 		pane.setRight(vBoxRight);
+		pane.setLeft(vBoxLeft);
 		
 		//Top
 		pane.setTop(menuBar);
@@ -151,7 +147,7 @@ public class Write_Value_C extends Application{
 		vBoxRight.getChildren().addAll(liveStatLabel, correctAnswers, wrongAnswers, percentageCount, grade);
 		
 		//Left
-		vBoxLeft.
+		vBoxLeft.getChildren().add(backSelectedQuiz);
 		
 		//Styling
 		showText.setStyle("-fx-font-size: 14");
@@ -160,8 +156,20 @@ public class Write_Value_C extends Application{
 		checkButton.setStyle("-fx-font-size: 14");
 		vBoxCenter.setPadding(new Insets(70, 10, 10, 150));
 		vBoxRight.setStyle("-fx-background-color: #75c9ea");
+		vBoxLeft.setStyle("-fx-background-color: #75c9ea");
+		vBoxCenter.setStyle("-fx-background-color: #75c9ea");
 		showText.setStyle("-fx-font-size: 20");
-		showText.setAlignment(Pos.CENTER);
+		backSelectedQuiz.setStyle("-fx-font-size: 20");
+		okButton.setStyle("-fx-font-size: 14");
+		labelHome.setStyle("-fx-font-size: 16");
+		menuBar.setStyle("-fx-background-color: #1abc9c");
+		
+		//Live Stats Styling
+		liveStatLabel.setStyle("-fx-font-size: 18");
+		correctAnswers.setStyle("-fx-font-size: 18");
+		wrongAnswers.setStyle("-fx-font-size: 18");
+		percentageCount.setStyle("-fx-font-size: 18");
+		grade.setStyle("-fx-font-size: 18");
 		
 		
 		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
