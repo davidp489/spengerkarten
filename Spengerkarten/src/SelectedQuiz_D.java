@@ -387,7 +387,7 @@ public class SelectedQuiz_D extends Application
 		quizElement.getChildren().addAll(quizKey, reveal);
 		
 		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
-		scene = new Scene(pane, 1280, 720);
+		scene = new Scene(pane, 1500, 720);
 		scene.getStylesheets().add("Style.css");
 		
 		stage.setScene(scene);

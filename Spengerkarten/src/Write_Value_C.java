@@ -39,7 +39,10 @@ public class Write_Value_C extends Application{
 		BorderPane pane = new BorderPane();
 		VBox vBoxCenter = new VBox(); //VBox center
 		VBox vBoxRight = new VBox(); //VBox rechts
+		VBox vBoxLeft = new VBox(); //VBox links
 		HBox hBoxCenter = new HBox();
+		Button backHome = new Button();
+		Button backSelectedQuiz = new Button();
 		
 		
 		Label labelHome = new Label("Home");
@@ -116,8 +119,20 @@ public class Write_Value_C extends Application{
 			}
 		});
 		
+		backHome.setOnAction(homeEvent ->{
+			Main_Page_L goHome = new Main_Page_L();
+			try {
+				goHome.start(stage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 		
-		
+		backSelectedQuiz.setOnAction(backSelectedQuizEvent ->{
+			SelectedQuiz_D goSelectedQuiz = new SelectedQuiz_D();
+			goSelectedQuiz.quizUebernehmen(stage, newQuiz);
+		});
 		
 		
 		//Main
@@ -135,6 +150,9 @@ public class Write_Value_C extends Application{
 		//Right
 		vBoxRight.getChildren().addAll(liveStatLabel, correctAnswers, wrongAnswers, percentageCount, grade);
 		
+		//Left
+		vBoxLeft.
+		
 		//Styling
 		showText.setStyle("-fx-font-size: 14");
 		writeAnswer.setStyle("-fx-font-size: 14");
@@ -147,7 +165,7 @@ public class Write_Value_C extends Application{
 		
 		
 		stage.getIcons().add(new Image("file:Spengerkarten\\\\src\\\\spengerkarten_logo.png"));
-		Scene scene = new Scene(pane, 2000, 1000);
+		Scene scene = new Scene(pane, 1500, 720);
 		stage.setScene(scene);
 		stage.show();
 	}
