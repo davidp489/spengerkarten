@@ -8,6 +8,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -36,6 +38,11 @@ public class Write_Value_C extends Application{
 		VBox vBoxRight = new VBox(); //VBox rechts
 		HBox hBoxCenter = new HBox();
 		
+		Label labelHome = new Label("Home");
+		MenuBar menuBar = new MenuBar();
+		Menu home = new Menu("", labelHome);
+		menuBar.getMenus().addAll(home);
+		labelHome.setStyle("-fx-font-size: 14");
 		Label showText = new Label();
 		TextField writeAnswer = new TextField();
 		Button checkButton = new Button("Check");
@@ -49,7 +56,6 @@ public class Write_Value_C extends Application{
 		Label grade = new Label("Note: -");
 		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		Set<String> keyList = new HashSet<String>();
-		
 		
 		
 		getRandKey(keyList, showText);
@@ -75,7 +81,12 @@ public class Write_Value_C extends Application{
 			{
 				if(index == newQuiz.getSize() - 1)
 				{
+					wrong++;
+					wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+					index++;
+					showText.setText(showText.getText() + " = " + newQuiz.getValue(showText.getText()));
 					calculateGrade(percentageCount, grade);
+					checkButton.setDisable(true);
 				}
 				else
 				{
@@ -102,6 +113,9 @@ public class Write_Value_C extends Application{
 		//Main
 		pane.setCenter(vBoxCenter);
 		pane.setRight(vBoxRight);
+		
+		//Top
+		pane.getChildren().add(menuBar);
 		
 		//Center
 		vBoxCenter.getChildren().addAll(showText, writeAnswer);

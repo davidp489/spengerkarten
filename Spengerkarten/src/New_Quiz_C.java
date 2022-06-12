@@ -58,7 +58,6 @@ public class New_Quiz_C extends Application{
 		MenuItem importCsv = new MenuItem("Import");
 		menuBar.getMenus().addAll(home, load);
 		load.getItems().add(importCsv);
-		//ObservableList
 		TextField key = new TextField();
 		key.setPromptText("first vocab");
 		TextField value = new TextField();
