@@ -42,6 +42,10 @@ public class SelectedQuiz_D extends Application
 	private Button yes;
 	private Button no;
 	
+	private Label livestatlable, correctAnswers, wrongAnswers, percentageCount, grade, abpruefung, endOfQuiz, quizCount;
+	
+	private Text quizKey;
+	
 	Quiz newQuiz;
 	
 	private List<String> keys;
@@ -104,21 +108,21 @@ public class SelectedQuiz_D extends Application
 		
 		
 		this.back = new Button("Zur�ck");
-		Label quizCount = new Label((index+1) + "/" + newQuiz.getSize());
+		this.quizCount = new Label((index+1) + "/" + newQuiz.getSize());
 		this.continueButton = new Button("Weiter");
 		
 		
-		Label livestatlable = new Label("Live stats: " + this.newQuiz.getName());
-		Label correctAnswers = new Label("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
-		Label wrongAnswers = new Label("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
-		Label percentageCount = new Label("Richtig in %: -");
-		Label grade = new Label("Note: -");
+		this.livestatlable = new Label("Live stats: " + this.newQuiz.getName());
+		this.correctAnswers = new Label("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
+		this.wrongAnswers = new Label("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+		this.percentageCount = new Label("Richtig in %: -");
+		this.grade = new Label("Note: -");
 		
-		Label abpruefung = new Label("Hast du die Antwort gewusst?");
-		Label endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
+		this.abpruefung = new Label("Hast du die Antwort gewusst?");
+		this.endOfQuiz = new Label("Du bist am Ende angelangt, rechts siehst du dein Ergebnis");
 		
 		//Inhalt des Elementes
-		Text quizKey = new Text(newQuiz.getKeyFromIndex(index));
+		this.quizKey = new Text(newQuiz.getKeyFromIndex(index));
 		
 		
 		labelHome.setOnMouseClicked((e -> {
@@ -134,13 +138,8 @@ public class SelectedQuiz_D extends Application
 		
 		random.setOnAction((ActionEvent event) -> {
 			bottomhbox.getChildren().removeAll(continueButton, back);
-			//Score wird zur�ckgesetzt
-			this.correct = 0;
-			this.wrong = 0;
-			correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
-			wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
-			percentageCount.setText("Richtig in %: -");
-			grade.setText("Note: -");
+
+			refreshRandomizer();
 			
 			/*Checkt beim Starten vom Randomizer, ob der "L�sung anzeigen" Button noch da ist (Da er nach dem Ende des Quizzes entfernt wird) 
 			 *	wenn nein, wird er hinzugef�gt. 
@@ -164,21 +163,6 @@ public class SelectedQuiz_D extends Application
 				quizElement.getChildren().add(reveal);
 				
 			}
-			
-			this.checkIfRand = true;
-			//Index wird automatisch auf 0 gesetzt
-			index = 0;
-			//Inhalt der Hashmap wird in einer Liste gespeichert
-			keys = new ArrayList<String>(newQuiz.getMap().keySet());
-			//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
-			Collections.shuffle(keys);
-			System.out.format("Index: %s", index);
-			System.out.println();
-			System.out.format("Liste mit Randomizer: %s", keys);
-			System.out.println();
-			//Der erste Index wird abgebildet
-			quizKey.setText(keys.get(0).toString());
-			quizCount.setText((index+1) + "/" + newQuiz.getSize());
 		});
 		
 		/*Wenn der Button 'Aufloesen' gedr�ckt wird, wird die Antwort der Frage/des Vokabulars angezeigt und 
@@ -227,27 +211,7 @@ public class SelectedQuiz_D extends Application
 				percentageCount.setText("Richtig in %: " + percentageFormatted);
 				
 				//Bestimmung der Note
-				if(percentage < 0.5)
-				{
-					note = 5;
-				} 
-				else if(percentage >= 0.5 && percentage < 0.65) 
-				{
-					note = 4;
-				} 
-				else if(percentage >= 0.65 && percentage < 0.8)
-				{
-					note = 3;
-				} 
-				else if(percentage >= 0.8 && percentage < 0.9)
-				{
-					note = 2;
-				} 
-				else if(percentage >= 0.9)
-				{
-					note = 1;
-				}
-				grade.setText("Note: " + note);
+				notenBerechnung();
 				return;
 			}
 			index++;
@@ -287,26 +251,8 @@ public class SelectedQuiz_D extends Application
 				percentageCount.setText("Richtig in %: " + percentageFormatted);
 				
 				//Bestimmung der Note
-				if(percentage < 0.5)
-				{
-					note = 5;
-				} 
-				else if(percentage >= 0.5 && percentage < 0.65) 
-				{
-					note = 4;
-				} 
-				else if(percentage >= 0.65 && percentage < 0.8)
-				{
-					note = 3;
-				} 
-				else if(percentage >= 0.8 && percentage < 0.9)
-				{
-					note = 2;
-				} 
-				else if(percentage >= 0.9)
-				{
-					note = 1;
-				}
+				notenBerechnung();
+				
 				grade.setText("Note: " + note);
 				return;
 			}
@@ -345,12 +291,18 @@ public class SelectedQuiz_D extends Application
 			{
 				return;
 			}
+			if(quizElement.getChildren().contains(hide))
+			{
+				quizElement.getChildren().remove(hide);
+				quizElement.getChildren().add(reveal);
+			}
+			
+			index++;
+			System.out.format("Index: %s", index);
+			System.out.println();
 			//Sobald der Random Button gedr�ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
 			if(checkIfRand)
 			{
-				index++;
-				System.out.format("Index: %s", index);
-				System.out.println();
 				System.out.format("Liste mit Randomizer: %s", keys);
 				System.out.println();
 				//Die Liste mit dem Randomizer
@@ -359,9 +311,6 @@ public class SelectedQuiz_D extends Application
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
-				index++;
-				System.out.format("Index: %s", index);
-				System.out.println();
 				System.out.format("Liste: %s", newQuiz.getMap());
 				System.out.println();
 				//Die Liste ohne Randomizer
@@ -377,12 +326,18 @@ public class SelectedQuiz_D extends Application
 			{
 				return;
 			}
+			if(quizElement.getChildren().contains(hide))
+			{
+				quizElement.getChildren().remove(hide);
+				quizElement.getChildren().add(reveal);
+			}
+			
+			index--;
+			System.out.format("Index: %s", index);
+			System.out.println();
 			//Sobald der Random Button gedr�ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
 			if(checkIfRand)
 			{
-				index--;
-				System.out.format("Index: %s", index);
-				System.out.println();
 				System.out.format("Liste mit Randomizer: %s", keys);
 				System.out.println();
 				//Die Liste mit dem Randomizer
@@ -391,16 +346,12 @@ public class SelectedQuiz_D extends Application
 			//Andernfalls wird die normale Liste ohne Randomizer verwendet
 			} else
 			{
-				index--;
-				System.out.format("Index: %s", index);
-				System.out.println();
 				System.out.format("Liste: %s", newQuiz.getMap());
 				System.out.println();
 				//Die Liste ohne Randomizer
 				quizKey.setText(newQuiz.getKeyFromIndex(index));
 				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
 			}
-			
 				
 		});
 		
@@ -485,5 +436,54 @@ public class SelectedQuiz_D extends Application
 		}
 	}
 	
+	public void notenBerechnung()
+	{
+		if(percentage < 0.5)
+		{
+			note = 5;
+		} 
+		else if(percentage >= 0.5 && percentage < 0.65) 
+		{
+			note = 4;
+		} 
+		else if(percentage >= 0.65 && percentage < 0.8)
+		{
+			note = 3;
+		} 
+		else if(percentage >= 0.8 && percentage < 0.9)
+		{
+			note = 2;
+		} 
+		else if(percentage >= 0.9)
+		{
+			note = 1;
+		}
+		grade.setText("Note: " + note);
+	}
 	
+	public void refreshRandomizer()
+	{
+		//Score wird zur�ckgesetzt
+		this.correct = 0;
+		this.wrong = 0;
+		correctAnswers.setText("Richtige antworten: " + this.correct + "/" + this.newQuiz.getSize());
+		wrongAnswers.setText("Falsche antworten: " + this.wrong + "/" + this.newQuiz.getSize());
+		percentageCount.setText("Richtig in %: -");
+		grade.setText("Note: -");
+		
+		this.checkIfRand = true;
+		//Index wird automatisch auf 0 gesetzt
+		index = 0;
+		//Inhalt der Hashmap wird in einer Liste gespeichert
+		keys = new ArrayList<String>(newQuiz.getMap().keySet());
+		//Die Liste wird geshuffled bzw. mit einem Randomizer versehen.
+		Collections.shuffle(keys);
+		System.out.format("Index: %s", index);
+		System.out.println();
+		System.out.format("Liste mit Randomizer: %s", keys);
+		System.out.println();
+		//Der erste Index wird abgebildet
+		quizKey.setText(keys.get(0).toString());
+		quizCount.setText((index+1) + "/" + newQuiz.getSize());
+	}
 }
