@@ -31,16 +31,7 @@ public class SelectedQuiz_D extends Application
 	private BorderPane pane;
 	Scene scene;
 	
-	private Button random;
-	private Button writeValue;
-	private Button multipleChoice;
-	private Button back;
-	private Button continueButton;
-	private Button reveal;
-	private Button hide;
-	
-	private Button yes;
-	private Button no;
+	private Button random, writeValue, multipleChoice, back, continueButton, reveal, hide, yes, no;
 	
 	private Label livestatlable, correctAnswers, wrongAnswers, percentageCount, grade, abpruefung, endOfQuiz, quizCount;
 	
@@ -155,8 +146,7 @@ public class SelectedQuiz_D extends Application
 				livestats.getChildren().addAll(livestatlable, correctAnswers, wrongAnswers, percentageCount, grade);
 			}
 			
-			if(!quizElement.getChildren().contains(reveal) && quizElement.getChildren().contains(endOfQuiz) 
-					&& !quizElement.getChildren().contains(quizKey))
+			if(quizElement.getChildren().contains(endOfQuiz))
 			{
 				quizElement.getChildren().remove(endOfQuiz);
 				quizElement.getChildren().add(quizKey);
@@ -186,7 +176,6 @@ public class SelectedQuiz_D extends Application
 		});
 		
 		yes.setOnAction((ActionEvent event) -> {
-			quizElement.getChildren().add(reveal);
 			//Nach einer richtigen Antwort wird die Zahl der korrekten Antworten inkrementiert
 			correct++;
 			System.out.format("Anzahl an korrekten Antworten: %s", correct);
@@ -214,6 +203,7 @@ public class SelectedQuiz_D extends Application
 				notenBerechnung();
 				return;
 			}
+			quizElement.getChildren().add(reveal);
 			index++;
 			System.out.format("Index: %s", index);
 			System.out.println();
@@ -252,8 +242,6 @@ public class SelectedQuiz_D extends Application
 				
 				//Bestimmung der Note
 				notenBerechnung();
-				
-				grade.setText("Note: " + note);
 				return;
 			}
 			index++;
@@ -300,23 +288,13 @@ public class SelectedQuiz_D extends Application
 			index++;
 			System.out.format("Index: %s", index);
 			System.out.println();
-			//Sobald der Random Button gedr�ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
-			if(checkIfRand)
-			{
-				System.out.format("Liste mit Randomizer: %s", keys);
-				System.out.println();
-				//Die Liste mit dem Randomizer
-				quizKey.setText(keys.get(index).toString());
-				quizCount.setText(index + "/" + newQuiz.getSize());
-			//Andernfalls wird die normale Liste ohne Randomizer verwendet
-			} else
-			{
-				System.out.format("Liste: %s", newQuiz.getMap());
-				System.out.println();
-				//Die Liste ohne Randomizer
-				quizKey.setText(newQuiz.getKeyFromIndex(index));
-				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
-			}
+	
+			System.out.format("Liste: %s", newQuiz.getMap());
+			System.out.println();
+			//Die Liste ohne Randomizer
+			quizKey.setText(newQuiz.getKeyFromIndex(index));
+			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
+			
 				
 		});
 			
@@ -335,23 +313,13 @@ public class SelectedQuiz_D extends Application
 			index--;
 			System.out.format("Index: %s", index);
 			System.out.println();
-			//Sobald der Random Button gedr�ckt wird, wird 'checkIfRand' auf true gesetzt, somit wird die Liste geshuffled
-			if(checkIfRand)
-			{
-				System.out.format("Liste mit Randomizer: %s", keys);
-				System.out.println();
-				//Die Liste mit dem Randomizer
-				quizKey.setText(keys.get(index).toString());
-				quizCount.setText(index + "/" + newQuiz.getSize());
-			//Andernfalls wird die normale Liste ohne Randomizer verwendet
-			} else
-			{
-				System.out.format("Liste: %s", newQuiz.getMap());
-				System.out.println();
-				//Die Liste ohne Randomizer
-				quizKey.setText(newQuiz.getKeyFromIndex(index));
-				quizCount.setText((index + 1) + "/" + newQuiz.getSize());
-			}
+			
+			System.out.format("Liste: %s", newQuiz.getMap());
+			System.out.println();
+			//Die Liste ohne Randomizer
+			quizKey.setText(newQuiz.getKeyFromIndex(index));
+			quizCount.setText((index + 1) + "/" + newQuiz.getSize());
+			
 				
 		});
 		
